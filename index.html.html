@@ -16,6 +16,9 @@ window.$RefreshSig$ = () => (type) => type;</script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/compressorjs@1.2.1/dist/compressor.min.js"></script>
+    <!-- jsPDF and html2canvas libraries for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --hijau-gelap: #004d40;
@@ -28,6 +31,19 @@ window.$RefreshSig$ = () => (type) => type;</script>
             --lebar-kartu: 85.6mm;
             --tinggi-kartu: 53.98mm;
             --sidebar-width: 240px;
+
+            /* New CSS variables for card colors */
+            --card-front-bg: var(--hijau-gradient); /* Default to existing green gradient */
+            --card-back-bg: var(--hijau-gradient);  /* Default to existing green gradient */
+            --card-front-text-color: var(--putih);
+            --card-back-text-color: var(--putih);
+            --card-front-border-image: var(--gold-gradient);
+            --card-back-border-image: var(--gold-gradient);
+            --card-front-data-label-color: #e0e0e0;
+            --card-front-data-value-color: #f5f5f5;
+            --card-front-expiry-color: #e0e0e0;
+            --card-back-party-name-color: var(--putih);
+            --card-back-member-name-color: var(--putih);
         }
         *, *::before, *::after { box-sizing: border-box; }
         body {
@@ -96,7 +112,8 @@ window.$RefreshSig$ = () => (type) => type;</script>
         .form-group input[type="text"],
         .form-group input[type="date"],
         .form-group select,
-        .form-group textarea { /* Added textarea */
+        .form-group textarea,
+        .form-group input[type="color"] { /* Added input type color */
             width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px;
             font-size: 1em;
             transition: border-color 0.2s, box-shadow 0.2s;
@@ -111,7 +128,8 @@ window.$RefreshSig$ = () => (type) => type;</script>
         }
         .form-group input:focus,
         .form-group select:focus,
-        .form-group textarea:focus { /* Added textarea */
+        .form-group textarea:focus,
+        .form-group input[type="color"]:focus { /* Added input type color */
             border-color: var(--hijau-utama);
             box-shadow: 0 0 0 3px rgba(0, 105, 92, 0.2);
             outline: none;
@@ -144,13 +162,19 @@ window.$RefreshSig$ = () => (type) => type;</script>
         .card-container {
             width: var(--lebar-kartu); height: var(--tinggi-kartu);
             border-radius: 3mm; overflow: hidden; position: relative;
-            background: var(--hijau-gradient);
-            color: var(--putih); flex-shrink: 0;
+            background: var(--card-front-bg); /* Use new variable */
+            color: var(--card-front-text-color); /* Use new variable */
+            flex-shrink: 0;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             border: 2px solid;
             border-image-slice: 1;
-            border-image-source: var(--gold-gradient);
+            border-image-source: var(--card-front-border-image); /* Use new variable */
             display: flex;
+        }
+        .card-container.back-card {
+            background: var(--card-back-bg); /* Use new variable for back card */
+            color: var(--card-back-text-color); /* Use new variable for back card */
+            border-image-source: var(--card-back-border-image); /* Use new variable for back card */
         }
         .card-content {
             position: relative; z-index: 1; padding: 3mm; height: 100%;
@@ -175,8 +199,8 @@ window.$RefreshSig$ = () => (type) => type;</script>
             grid-template-columns: 26mm auto 1fr;
             gap: 0.5mm 2mm; align-items: center;
         }
-        .data-grid span:nth-child(3n-2) { font-weight: 600; color: #e0e0e0; }
-        .data-grid span:nth-child(3n) { color: #f5f5f5; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        .data-grid span:nth-child(3n-2) { font-weight: 600; color: var(--card-front-data-label-color); } /* Use new variable */
+        .data-grid span:nth-child(3n) { color: var(--card-front-data-value-color); text-shadow: 1px 1px 2px rgba(0,0,0,0.5); } /* Use new variable */
         .data-grid .alamat-value {
             word-wrap: break-word; /* Allows long words to break and wrap */
             overflow-wrap: break-word; /* Ensures words break at character level if needed */
@@ -198,7 +222,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
         }
         .expiry-date {
             font-size: 2mm; font-style: italic; text-align: center;
-            color: #e0e0e0;
+            color: var(--card-front-expiry-color); /* Use new variable */
         }
         .id-box {
             background: var(--gold-gradient); color: var(--gelap);
@@ -235,13 +259,13 @@ window.$RefreshSig$ = () => (type) => type;</script>
             font-weight: 700;
             font-size: 2.8mm;
             text-transform: uppercase;
-            color: var(--putih);
+            color: var(--card-back-member-name-color); /* Use new variable */
         }
         .party-name-box {
             font-weight: 700;
             font-size: 3.0mm;
             text-transform: uppercase;
-            color: var(--putih);
+            color: var(--card-back-party-name-color); /* Use new variable */
         }
         .back-images {
             display: flex;
@@ -405,13 +429,20 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 box-shadow: none;
                 border: 2px solid;
                 border-image-slice: 1;
-                border-image-source: var(--gold-gradient);
+                border-image-source: var(--card-front-border-image); /* Use new variable */
                 margin: 0;
                 transform-origin: top left;
                 width: var(--lebar-kartu);
                 height: var(--tinggi-kartu);
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
+                background: var(--card-front-bg); /* Use new variable */
+                color: var(--card-front-text-color); /* Use new variable */
+            }
+            .card-container.back-card {
+                background: var(--card-back-bg); /* Use new variable for back card */
+                color: var(--card-back-text-color); /* Use new variable for back card */
+                border-image-source: var(--card-back-border-image); /* Use new variable for back card */
             }
             .card-content {
                 padding: 3mm;
@@ -423,6 +454,12 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 text-shadow: none;
                 font-size: 0.92em;
             }
+            .data-grid span:nth-child(3n-2) { color: var(--card-front-data-label-color); }
+            .data-grid span:nth-child(3n) { color: var(--card-front-data-value-color); }
+            .expiry-date { color: var(--card-front-expiry-color); }
+            .member-name-box { color: var(--card-back-member-name-color); }
+            .party-name-box { color: var(--card-back-party-name-color); }
+
             @page {
                 size: A4 portrait;
                 margin: 9.55mm 18.4mm;
@@ -659,6 +696,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 </div>
                 <div class="form-buttons" style="margin-bottom: 20px;">
                     <button id="exportCSVBtn" class="btn btn-primary" aria-label="Ekspor data pendukung ke CSV">Ekspor ke CSV</button>
+                    <button id="downloadPdfBtn" class="btn btn-secondary" aria-label="Unduh data pendukung ke PDF">Unduh PDF</button>
                     <button id="downloadCardsBtn" class="btn btn-warning" aria-label="Download kartu pendukung yang dipilih">Download Kartu</button>
                     <button id="printFrontBtn" class="btn btn-secondary" aria-label="Cetak kartu depan">Cetak Depan Saja</button>
                     <button id="printBackBtn" class="btn btn-secondary" aria-label="Cetak kartu belakang">Cetak Belakang Saja</button>
@@ -706,6 +744,22 @@ window.$RefreshSig$ = () => (type) => type;</script>
                         <div class="form-group">
                             <label for="setting_card_title">Judul Kartu Depan</label>
                             <input type="text" id="setting_card_title" placeholder="Contoh: KARTU LOYALIS PENDUKUNG SETIA" aria-required="true">
+                        </div>
+                        <div class="form-group">
+                            <label for="setting_front_card_color">Warna Latar Depan Kartu</label>
+                            <input type="color" id="setting_front_card_color" value="#00695c">
+                        </div>
+                        <div class="form-group">
+                            <label for="setting_back_card_color">Warna Latar Belakang Kartu</label>
+                            <input type="color" id="setting_back_card_color" value="#00695c">
+                        </div>
+                        <div class="form-group">
+                            <label for="setting_front_card_text_color">Warna Teks Depan Kartu</label>
+                            <input type="color" id="setting_front_card_text_color" value="#ffffff">
+                        </div>
+                        <div class="form-group">
+                            <label for="setting_back_card_text_color">Warna Teks Belakang Kartu</label>
+                            <input type="color" id="setting_back_card_text_color" value="#ffffff">
                         </div>
                         <div class="form-group">
                             <label for="next-id-counter-display">Nomor ID Pendukung Berikutnya</label>
@@ -777,7 +831,12 @@ window.$RefreshSig$ = () => (type) => type;</script>
                     pkbLogoUrl: null,
                     namaAnggotaDPRD: 'Nama Anggota DPRD',
                     cardTitle: 'KARTU LOYALIS PENDUKUNG SETIA',
-                    nextIdCounter: 1
+                    nextIdCounter: 1,
+                    // New color settings
+                    frontCardColor: '#00695c', // Default green
+                    backCardColor: '#00695c',  // Default green
+                    frontCardTextColor: '#ffffff', // Default white
+                    backCardTextColor: '#ffffff'  // Default white
                 }
             },
             constants: {
@@ -826,11 +885,16 @@ window.$RefreshSig$ = () => (type) => type;</script>
             printBackBtn: document.getElementById('printBackBtn'),
             printDuplexBtn: document.getElementById('printDuplexBtn'),
             downloadCardsBtn: document.getElementById('downloadCardsBtn'),
+            downloadPdfBtn: document.getElementById('downloadPdfBtn'),
             saveSettingsBtn: document.getElementById('save-settings-btn'),
             settingNamaAnggotaInput: document.getElementById('setting_nama_anggota'),
             settingDprdPhotoUpload: document.getElementById('setting_dprd_photo_upload'),
             settingPkbLogoUpload: document.getElementById('setting_pkb_logo_upload'),
             settingCardTitleInput: document.getElementById('setting_card_title'),
+            settingFrontCardColor: document.getElementById('setting_front_card_color'), // New
+            settingBackCardColor: document.getElementById('setting_back_card_color'),   // New
+            settingFrontCardTextColor: document.getElementById('setting_front_card_text_color'), // New
+            settingBackCardTextColor: document.getElementById('setting_back_card_text_color'),   // New
             searchInput: document.getElementById('search-input'),
             exportCSVBtn: document.getElementById('exportCSVBtn'),
             categoryDetailsContainer: document.getElementById('category-details'),
@@ -921,6 +985,12 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 if (!appState.db.settings.pkbLogoUrl) appState.db.settings.pkbLogoUrl = appState.constants.PLACEHOLDER_LOGO_URL;
                 if (!appState.db.settings.namaAnggotaDPRD) appState.db.settings.namaAnggotaDPRD = 'Nama Anggota DPRD';
                 if (!appState.db.settings.cardTitle) appState.db.settings.cardTitle = 'KARTU LOYALIS PENDUKUNG SETIA';
+                // Initialize new color settings if not present
+                if (!appState.db.settings.frontCardColor) appState.db.settings.frontCardColor = '#00695c';
+                if (!appState.db.settings.backCardColor) appState.db.settings.backCardColor = '#00695c';
+                if (!appState.db.settings.frontCardTextColor) appState.db.settings.frontCardTextColor = '#ffffff';
+                if (!appState.db.settings.backCardTextColor) appState.db.settings.backCardTextColor = '#ffffff';
+
 
                 // Muat nextIdCounter atau hitung jika tidak ada
                 if (appState.db.settings.nextIdCounter === undefined || appState.db.settings.nextIdCounter < 1) {
@@ -945,7 +1015,11 @@ window.$RefreshSig$ = () => (type) => type;</script>
                         pkbLogoUrl: appState.constants.PLACEHOLDER_LOGO_URL,
                         namaAnggotaDPRD: 'Nama Anggota DPRD',
                         cardTitle: 'KARTU LOYALIS PENDUKUNG SETIA',
-                        nextIdCounter: 1
+                        nextIdCounter: 1,
+                        frontCardColor: '#00695c',
+                        backCardColor: '#00695c',
+                        frontCardTextColor: '#ffffff',
+                        backCardTextColor: '#ffffff'
                     }
                 };
                 // Tambahkan beberapa data contoh untuk testing
@@ -958,12 +1032,45 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 saveAppStateToLocalStorage();
             }
             updateNextIdDisplay();
+            applyCardColorsToCSS(); // Apply colors on load
         };
 
         const updateNextIdDisplay = () => {
             if (domElements.nextIdCounterDisplay) {
                 domElements.nextIdCounterDisplay.value = `PKB-LOYAL-${String(appState.db.settings.nextIdCounter).padStart(4, '0')}`;
             }
+        };
+
+        // Function to apply card colors to CSS variables
+        const applyCardColorsToCSS = () => {
+            const root = document.documentElement;
+            root.style.setProperty('--card-front-bg', appState.db.settings.frontCardColor);
+            root.style.setProperty('--card-back-bg', appState.db.settings.backCardColor);
+            root.style.setProperty('--card-front-text-color', appState.db.settings.frontCardTextColor);
+            root.style.setProperty('--card-back-text-color', appState.db.settings.backCardTextColor);
+            // Adjust data label/value colors based on front card text color for better contrast
+            // This is a simple heuristic, might need more complex logic for perfect contrast
+            const isFrontTextLight = isColorLight(appState.db.settings.frontCardTextColor);
+            root.style.setProperty('--card-front-data-label-color', isFrontTextLight ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)');
+            root.style.setProperty('--card-front-data-value-color', isFrontTextLight ? 'rgba(255,255,255,0.95)' : 'rgba(0,0,0,0.95)');
+            root.style.setProperty('--card-front-expiry-color', isFrontTextLight ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)');
+            root.style.setProperty('--card-back-party-name-color', appState.db.settings.backCardTextColor);
+            root.style.setProperty('--card-back-member-name-color', appState.db.settings.backCardTextColor);
+        };
+
+        // Helper function to determine if a color is light or dark (for text contrast)
+        const isColorLight = (hexColor) => {
+            // Handle cases where hexColor might be a gradient or invalid
+            if (!hexColor || !hexColor.startsWith('#') || hexColor.length !== 7) {
+                // Fallback for non-hex colors or gradients, assume a default contrast
+                return true; // Assume light text is needed for default dark backgrounds
+            }
+            const r = parseInt(hexColor.substring(1, 3), 16);
+            const g = parseInt(hexColor.substring(3, 5), 16);
+            const b = parseInt(hexColor.substring(5, 7), 16);
+            // HSP (Highly Sensitive Pooled) color model for perceived brightness
+            const hsp = Math.sqrt(0.299 * (r * r) + 0.587 * (g * g) + 0.114 * (b * b));
+            return hsp > 127.5; // Threshold for light/dark
         };
 
         // --- CARD RENDERING FUNCTIONS ---
@@ -991,6 +1098,25 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 namaAnggotaDPRD: appState.db.settings.namaAnggotaDPRD || 'Nama Anggota',
                 cardTitle: appState.db.settings.cardTitle || 'KARTU LOYALIS PENDUKUNG SETIA'
             };
+
+            // Apply dynamic colors directly to the cloned card elements
+            // This is crucial for html2canvas to capture the correct styles
+            if (cardClone.classList.contains('front-card')) {
+                cardClone.style.background = appState.db.settings.frontCardColor; // Use background for solid color
+                cardClone.style.color = appState.db.settings.frontCardTextColor;
+                // Update specific text elements for front card
+                const isFrontTextLight = isColorLight(appState.db.settings.frontCardTextColor);
+                cardClone.querySelectorAll('.data-grid span:nth-child(3n-2)').forEach(el => el.style.color = isFrontTextLight ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)');
+                cardClone.querySelectorAll('.data-grid span:nth-child(3n)').forEach(el => el.style.color = isFrontTextLight ? 'rgba(255,255,255,0.95)' : 'rgba(0,0,0,0.95)');
+                cardClone.querySelector('.expiry-date').style.color = isFrontTextLight ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)';
+            } else if (cardClone.classList.contains('back-card')) {
+                cardClone.style.background = appState.db.settings.backCardColor; // Use background for solid color
+                cardClone.style.color = appState.db.settings.backCardTextColor;
+                // Update specific text elements for back card
+                cardClone.querySelector('.party-name-box').style.color = appState.db.settings.backCardTextColor;
+                cardClone.querySelector('.member-name-box').style.color = appState.db.settings.backCardTextColor;
+            }
+
 
             cardClone.querySelectorAll('[data-field]').forEach(el => {
                 const fieldName = el.dataset.field;
@@ -1447,6 +1573,139 @@ window.$RefreshSig$ = () => (type) => type;</script>
             document.querySelectorAll('.select-card-checkbox').forEach(cb => cb.checked = false);
         };
 
+        const downloadPendukungToPDF = async () => {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4'); // 'p' for portrait, 'mm' for millimeters, 'a4' for A4 size
+            const margin = 10; // mm
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            let yOffset = margin;
+
+            // Add title
+            pdf.setFontSize(18);
+            pdf.text("Rekapitulasi Data Pendukung", margin, yOffset);
+            yOffset += 10;
+
+            // --- Render Table ---
+            const tableWrapper = document.querySelector('#rekap .rekap-table-wrapper');
+            if (!tableWrapper) {
+                alert("Tabel rekapitulasi tidak ditemukan.");
+                return;
+            }
+
+            // Temporarily clone and modify the table for PDF rendering
+            const originalTable = tableWrapper.querySelector('table');
+            const tempDiv = document.createElement('div');
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.left = '-9999px'; // Move off-screen
+            tempDiv.style.width = (pageWidth - 2 * margin) + 'mm'; // Constrain width for rendering
+            document.body.appendChild(tempDiv);
+
+            const tableClone = originalTable.cloneNode(true);
+            // Remove checkbox column
+            tableClone.querySelectorAll('th:first-child, td:first-child').forEach(el => el.remove());
+            // Remove action buttons column
+            tableClone.querySelectorAll('th:last-child, td:last-child').forEach(el => el.remove());
+            tempDiv.appendChild(tableClone);
+
+            try {
+                const canvas = await html2canvas(tempDiv, { scale: 2 }); // Increased scale for better quality
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = pageWidth - 2 * margin;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+
+                let position = yOffset;
+
+                pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+                heightLeft -= (pageHeight - position);
+
+                while (heightLeft > 0) {
+                    pdf.addPage();
+                    position = -heightLeft + margin; // Calculate position for the next part of the image
+                    pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                yOffset = (imgHeight % pageHeight) + margin; // Reset yOffset for next content
+                if (yOffset < margin) yOffset = margin; // Ensure it's not too high
+            } catch (error) {
+                console.error("Error rendering table to canvas:", error);
+                alert("Gagal merender tabel ke PDF. Silakan coba lagi.");
+            } finally {
+                document.body.removeChild(tempDiv); // Clean up temporary div
+            }
+
+            // --- Render Age Chart ---
+            const ageChartCanvas = document.getElementById('ageChart');
+            if (ageChartCanvas) {
+                if (yOffset + 100 > pageHeight) { // Estimate chart height
+                    pdf.addPage();
+                    yOffset = margin;
+                } else {
+                    yOffset += 20; // Space after table
+                }
+
+                pdf.setFontSize(16);
+                pdf.text("Distribusi Kategori Usia Pendukung", margin, yOffset);
+                yOffset += 10;
+
+                const chartImgData = ageChartCanvas.toDataURL('image/png');
+                const chartImgWidth = 150; // Adjust as needed
+                const chartImgHeight = ageChartCanvas.height * chartImgWidth / ageChartCanvas.width;
+                pdf.addImage(chartImgData, 'PNG', margin, yOffset, chartImgWidth, chartImgHeight);
+                yOffset += chartImgHeight + 10;
+            }
+
+            // --- Render Category Details ---
+            const categoryDetailsDiv = document.getElementById('category-details');
+            if (categoryDetailsDiv && categoryDetailsDiv.innerHTML.trim() !== '<p>Tidak ada data untuk ditampilkan.</p>') {
+                if (yOffset + 50 > pageHeight) { // Estimate details height
+                    pdf.addPage();
+                    yOffset = margin;
+                } else {
+                    yOffset += 20; // Space after chart
+                }
+
+                pdf.setFontSize(16);
+                pdf.text("Detail Pendukung per Kategori Usia", margin, yOffset);
+                yOffset += 10;
+
+                const tempDetailsDiv = document.createElement('div');
+                tempDetailsDiv.style.position = 'absolute';
+                tempDetailsDiv.style.left = '-9999px';
+                tempDetailsDiv.style.width = (pageWidth - 2 * margin) + 'mm';
+                tempDetailsDiv.innerHTML = categoryDetailsDiv.innerHTML; // Copy content
+                document.body.appendChild(tempDetailsDiv);
+
+                try {
+                    const canvas = await html2canvas(tempDetailsDiv, { scale: 2 });
+                    const imgData = canvas.toDataURL('image/png');
+                    const imgWidth = pageWidth - 2 * margin;
+                    const imgHeight = canvas.height * imgWidth / canvas.width;
+                    let heightLeft = imgHeight;
+
+                    let position = yOffset;
+
+                    pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+                    heightLeft -= (pageHeight - position);
+
+                    while (heightLeft > 0) {
+                        pdf.addPage();
+                        position = -heightLeft + margin;
+                        pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+                } catch (error) {
+                    console.error("Error rendering category details to canvas:", error);
+                    alert("Gagal merender detail kategori ke PDF. Silakan coba lagi.");
+                } finally {
+                    document.body.removeChild(tempDetailsDiv);
+                }
+            }
+
+            pdf.save("rekap_data_pendukung.pdf");
+        };
+
 
         // --- NAVIGATION FUNCTIONS ---
 
@@ -1465,8 +1724,13 @@ window.$RefreshSig$ = () => (type) => type;</script>
             } else if (targetId === 'rekap') {
                 renderRecapTable();
             } else if (targetId === 'pengaturan') {
+                // Load current settings into the form fields
                 domElements.settingNamaAnggotaInput.value = appState.db.settings.namaAnggotaDPRD;
                 domElements.settingCardTitleInput.value = appState.db.settings.cardTitle;
+                domElements.settingFrontCardColor.value = appState.db.settings.frontCardColor;
+                domElements.settingBackCardColor.value = appState.db.settings.backCardColor;
+                domElements.settingFrontCardTextColor.value = appState.db.settings.frontCardTextColor;
+                domElements.settingBackCardTextColor.value = appState.db.settings.backCardTextColor;
                 updateNextIdDisplay();
             }
         };
@@ -1488,13 +1752,16 @@ window.$RefreshSig$ = () => (type) => type;</script>
         };
 
         const performLogout = () => {
-            sessionStorage.removeItem('loggedIn');
-            domElements.loginPage.classList.remove('hidden');
-            domElements.appSidebar.classList.add('hidden');
-            domElements.appMainContent.classList.add('hidden');
-            domElements.usernameInput.value = '';
-            domElements.passwordInput.value = '';
-            domElements.loginErrorMessage.classList.add('hidden');
+            // Tambahkan konfirmasi sebelum logout
+            if (confirm("Apakah Anda yakin ingin keluar dari aplikasi?")) {
+                sessionStorage.removeItem('loggedIn');
+                domElements.loginPage.classList.remove('hidden');
+                domElements.appSidebar.classList.add('hidden');
+                domElements.appMainContent.classList.add('hidden');
+                domElements.usernameInput.value = '';
+                domElements.passwordInput.value = '';
+                domElements.loginErrorMessage.classList.add('hidden');
+            }
         };
 
         // --- EVENT LISTENERS SETUP ---
@@ -1518,6 +1785,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
             domElements.printBackBtn.addEventListener('click', () => printSelectedCards('back'));
             domElements.printDuplexBtn.addEventListener('click', () => printSelectedCards('duplex'));
             domElements.downloadCardsBtn.addEventListener('click', downloadSelectedCards);
+            domElements.downloadPdfBtn.addEventListener('click', downloadPendukungToPDF);
 
             domElements.recapTableBody.addEventListener('click', (e) => {
                 if (e.target.classList.contains('edit-btn')) {
@@ -1582,6 +1850,10 @@ window.$RefreshSig$ = () => (type) => type;</script>
             domElements.saveSettingsBtn.addEventListener('click', async () => {
                 appState.db.settings.namaAnggotaDPRD = domElements.settingNamaAnggotaInput.value.trim();
                 appState.db.settings.cardTitle = domElements.settingCardTitleInput.value.trim();
+                appState.db.settings.frontCardColor = domElements.settingFrontCardColor.value; // Save new color
+                appState.db.settings.backCardColor = domElements.settingBackCardColor.value;   // Save new color
+                appState.db.settings.frontCardTextColor = domElements.settingFrontCardTextColor.value; // Save new color
+                appState.db.settings.backCardTextColor = domElements.settingBackCardTextColor.value;   // Save new color
 
                 let dprdPhotoUrl = null;
                 const dprdFile = domElements.settingDprdPhotoUpload.files[0];
@@ -1612,6 +1884,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 appState.db.settings.pkbLogoUrl = pkbLogoUrl;
 
                 saveAppStateToLocalStorage();
+                applyCardColorsToCSS(); // Apply colors to live CSS variables
 
                 const currentPreviewDataString = domElements.pendukungForm.dataset.currentPreviewData;
                 if (currentPreviewDataString) {
@@ -1620,6 +1893,41 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 }
                 alert('Pengaturan kartu berhasil disimpan!');
             });
+
+            // Add event listeners for color inputs to update preview dynamically
+            domElements.settingFrontCardColor.addEventListener('input', () => {
+                appState.db.settings.frontCardColor = domElements.settingFrontCardColor.value;
+                applyCardColorsToCSS();
+                const currentPreviewDataString = domElements.pendukungForm.dataset.currentPreviewData;
+                if (currentPreviewDataString) {
+                    updateCardPreview(JSON.parse(currentPreviewDataString));
+                }
+            });
+            domElements.settingBackCardColor.addEventListener('input', () => {
+                appState.db.settings.backCardColor = domElements.settingBackCardColor.value;
+                applyCardColorsToCSS();
+                const currentPreviewDataString = domElements.pendukungForm.dataset.currentPreviewData;
+                if (currentPreviewDataString) {
+                    updateCardPreview(JSON.parse(currentPreviewDataString));
+                }
+            });
+            domElements.settingFrontCardTextColor.addEventListener('input', () => {
+                appState.db.settings.frontCardTextColor = domElements.settingFrontCardTextColor.value;
+                applyCardColorsToCSS();
+                const currentPreviewDataString = domElements.pendukungForm.dataset.currentPreviewData;
+                if (currentPreviewDataString) {
+                    updateCardPreview(JSON.parse(currentPreviewDataString));
+                }
+            });
+            domElements.settingBackCardTextColor.addEventListener('input', () => {
+                appState.db.settings.backCardTextColor = domElements.settingBackCardTextColor.value;
+                applyCardColorsToCSS();
+                const currentPreviewDataString = domElements.pendukungForm.dataset.currentPreviewData;
+                if (currentPreviewDataString) {
+                    updateCardPreview(JSON.parse(currentPreviewDataString));
+                }
+            });
+
 
             domElements.selectAllCheckbox.addEventListener('change', (e) => {
                 const isChecked = e.target.checked;
@@ -1696,9 +2004,15 @@ window.$RefreshSig$ = () => (type) => type;</script>
 
         const initializeAppContent = () => {
             loadAppStateFromLocalStorage();
+            // Set initial values for color inputs from loaded settings
             domElements.settingNamaAnggotaInput.value = appState.db.settings.namaAnggotaDPRD;
             domElements.settingCardTitleInput.value = appState.db.settings.cardTitle;
+            domElements.settingFrontCardColor.value = appState.db.settings.frontCardColor;
+            domElements.settingBackCardColor.value = appState.db.settings.backCardColor;
+            domElements.settingFrontCardTextColor.value = appState.db.settings.frontCardTextColor;
+            domElements.settingBackCardTextColor.value = appState.db.settings.backCardTextColor;
             
+            applyCardColorsToCSS(); // Apply colors to CSS variables on app start
             updateNextIdDisplay();
             renderRecapTable();
             resetPendukungForm();
