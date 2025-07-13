@@ -10,7 +10,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dasbor Kartu Pendukung - Final V6</title>
+    <title>Dasbor Kartu Pendukung Setia </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
@@ -23,7 +23,8 @@ window.$RefreshSig$ = () => (type) => type;</script>
         :root {
             --hijau-gelap: #004d40;
             --hijau-utama: #00695c;
-            --gold-gradient: linear-gradient(145deg, #BF953F, #FCF6BA, #B38728);
+            /* Brighter yellow gradient for card borders as requested */
+            --gold-gradient: linear-gradient(145deg, #FAD961, #F7F2B1, #E8C14E);
             --hijau-gradient: linear-gradient(145deg, #00695c, #004d40);
             --gelap: #212529;
             --abu-terang: #f8f9fa;
@@ -39,64 +40,106 @@ window.$RefreshSig$ = () => (type) => type;</script>
             --card-back-text-color: var(--putih);
             --card-front-border-image: var(--gold-gradient);
             --card-back-border-image: var(--gold-gradient);
-            --card-front-data-label-color: #e0e0e0;
-            --card-front-data-value-color: #f5f5f5;
-            --card-front-expiry-color: #e0e0e0;
+            --card-front-data-label-color: var(--putih);
+            --card-front-data-value-color: var(--putih);
+            --card-front-expiry-color: var(--putih);
             --card-back-party-name-color: var(--putih);
             --card-back-member-name-color: var(--putih);
+
+            /* Dark Mode Variables */
+            --body-bg: var(--abu-terang);
+            --text-color: var(--gelap);
+            --container-bg: var(--putih);
+            --border-color: #e9ecef;
+            --sidebar-bg: var(--gelap);
+            --sidebar-text: var(--putih);
+            --sidebar-active-bg: var(--hijau-utama);
+            --sidebar-active-text: var(--gelap);
+            --table-header-bg: var(--hijau-gelap);
+            --table-header-text: var(--putih);
+            --table-row-even-bg: #fdfdfd;
+            --table-row-hover-bg: #f0f0f0;
+            --input-border: #ced4da;
+            --input-focus-shadow: rgba(0, 105, 92, 0.2);
+            --login-bg: var(--abu-terang);
+            --login-box-bg: var(--putih);
         }
+
+        body.dark-mode {
+            --body-bg: #1a1a1a;
+            --text-color: #e0e0e0;
+            --container-bg: #2c2c2c;
+            --border-color: #444;
+            --sidebar-bg: #333;
+            --sidebar-text: #e0e0e0;
+            --sidebar-active-bg: #00796b;
+            --sidebar-active-text: #ffffff;
+            --table-header-bg: #00332e;
+            --table-header-text: #e0e0e0;
+            --table-row-even-bg: #222;
+            --table-row-hover-bg: #3a3a3a;
+            --input-border: #555;
+            --input-focus-shadow: rgba(0, 121, 107, 0.4);
+            --login-bg: #1a1a1a;
+            --login-box-bg: #2c2c2c;
+        }
+
         *, *::before, *::after { box-sizing: border-box; }
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0; 
-            background-color: var(--abu-terang); 
+            background-color: var(--body-bg); 
             display: flex; 
             height: 100vh;
-            color: var(--gelap);
-            /* Pastikan body adalah flex container untuk layout utama */
-            flex-direction: row; /* Atau column, tergantung layout aplikasi Anda */
-            overflow: hidden; /* Mencegah scrollbar ganda */
+            color: var(--text-color);
+            flex-direction: row;
+            overflow: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        /* Pastikan elemen yang hidden tidak mengambil ruang */
         .hidden {
             display: none !important;
         }
 
         .sidebar {
-            width: var(--sidebar-width); background-color: var(--gelap); color: var(--putih);
+            width: var(--sidebar-width); background-color: var(--sidebar-bg); color: var(--sidebar-text);
             flex-shrink: 0; display: flex; flex-direction: column; padding: 20px 0;
             box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .sidebar-header { text-align: center; padding: 0 20px 20px 20px; border-bottom: 1px solid #495057; margin-bottom: 15px; }
+        .sidebar-header { 
+            text-align: center; padding: 0 20px 20px 20px; border-bottom: 1px solid var(--border-color); margin-bottom: 15px; 
+            display: flex; flex-direction: column; align-items: center;
+        }
         .sidebar-header h3 { margin: 0; font-size: 1.3em; font-weight: 700; }
         .sidebar-menu { list-style: none; margin: 0; padding: 0; }
         .sidebar-menu li a {
             display: flex; align-items: center; gap: 15px; padding: 15px 20px;
-            color: var(--putih); text-decoration: none; transition: background-color 0.2s, border-left-color 0.2s;
+            color: var(--sidebar-text); text-decoration: none; transition: background-color 0.2s, border-left-color 0.2s, color 0.2s;
             border-left: 3px solid transparent;
             font-weight: 600;
         }
         .sidebar-menu li a:hover { background-color: #495057; }
-        .sidebar-menu li a.active { background-color: var(--hijau-utama); border-left-color: #f1e05a; }
-        .sidebar-menu li a svg { width: 24px; height: 24px; fill: var(--putih); }
-        .sidebar-menu li a.active svg { fill: var(--gelap); }
+        .sidebar-menu li a.active { background-color: var(--sidebar-active-bg); border-left-color: #f1e05a; color: var(--sidebar-active-text); }
+        .sidebar-menu li a svg { width: 24px; height: 24px; fill: currentColor; }
+        .sidebar-menu li a.active svg { fill: var(--sidebar-active-text); }
         .main-content {
             flex-grow: 1; padding: 30px; overflow-y: auto;
-            background-color: var(--abu-terang);
+            background-color: var(--body-bg);
+            transition: background-color 0.3s ease;
         }
         .page { display: none; animation: fadeIn 0.5s ease-in-out; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .container-box {
-            background-color: var(--putih); padding: 30px; border-radius: 10px;
+            background-color: var(--container-bg); padding: 30px; border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             margin-bottom: 30px;
-            border: 1px solid #e9ecef;
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
         h2 {
             font-size: 1.8em; color: var(--hijau-gelap); margin: 0 0 25px 0; padding-bottom: 15px;
             border-bottom: 2px solid var(--hijau-utama);
-            font-weight: 700;
         }
         .form-grid {
             display: grid;
@@ -106,32 +149,36 @@ window.$RefreshSig$ = () => (type) => type;</script>
         }
         .form-group { margin-bottom: 15px; }
         .form-group label {
-            display: block; font-weight: 600; margin-bottom: 8px; color: var(--gelap);
+            display: block; font-weight: 600; margin-bottom: 8px; color: var(--text-color);
             font-size: 0.95em;
         }
         .form-group input[type="text"],
         .form-group input[type="date"],
         .form-group select,
         .form-group textarea,
-        .form-group input[type="color"] { /* Added input type color */
-            width: 100%; padding: 12px; border: 1px solid #ced4da; border-radius: 6px;
+        .form-group input[type="color"] {
+            width: 100%; padding: 12px; border: 1px solid var(--input-border); border-radius: 6px;
             font-size: 1em;
-            transition: border-color 0.2s, box-shadow 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s, background-color 0.3s ease, color 0.3s ease;
+            background-color: var(--container-bg);
+            color: var(--text-color);
         }
         .form-group input[type="file"] {
             width: 100%; padding: 10px;
-            background-color: var(--abu-terang);
+            background-color: var(--body-bg);
             cursor: pointer;
-            border: 1px solid #ced4da; /* Ensure file input has border */
+            border: 1px solid var(--input-border);
             border-radius: 6px;
             font-size: 1em;
+            color: var(--text-color);
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus,
-        .form-group input[type="color"]:focus { /* Added input type color */
+        .form-group input[type="color"]:focus {
             border-color: var(--hijau-utama);
-            box-shadow: 0 0 0 3px rgba(0, 105, 92, 0.2);
+            box-shadow: 0 0 0 3px var(--input-focus-shadow);
             outline: none;
         }
         .form-buttons {
@@ -159,33 +206,47 @@ window.$RefreshSig$ = () => (type) => type;</script>
             display: flex; justify-content: center; flex-wrap: wrap; gap: 30px;
             margin-top: 15px;
         }
+
         .card-container {
-            width: var(--lebar-kartu); height: var(--tinggi-kartu);
-            border-radius: 3mm; overflow: hidden; position: relative;
-            background: var(--card-front-bg); /* Use new variable */
-            color: var(--card-front-text-color); /* Use new variable */
+            width: var(--lebar-kartu);
+            height: var(--tinggi-kartu);
+            overflow: hidden;
+            position: relative;
             flex-shrink: 0;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            border: 2px solid;
-            border-image-slice: 1;
-            border-image-source: var(--card-front-border-image); /* Use new variable */
-            display: flex;
+            box-shadow: 0 15px 10px rgba(0,0,0,0.2);
+            border-radius: 4mm;
+            padding: 1px;
+            background: var(--gold-gradient);
         }
-        .card-container.back-card {
-            background: var(--card-back-bg); /* Use new variable for back card */
-            color: var(--card-back-text-color); /* Use new variable for back card */
-            border-image-source: var(--card-back-border-image); /* Use new variable for back card */
-        }
+
         .card-content {
-            position: relative; z-index: 1; padding: 3mm; height: 100%;
-            display: flex; flex-direction: column; box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+            padding: 4mm;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
             justify-content: space-between;
             width: 100%;
+            background: var(--card-front-bg); 
+            color: var(--card-front-text-color);
+            border-radius: calc(4mm - 2px);
         }
+
+        .back-card .card-content {
+            background: var(--card-back-bg);
+            color: var(--card-back-text-color);
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 4mm;
+            padding-bottom: 4mm;
+        }
+
         .title-box {
             text-align: center; margin-bottom: 2mm;
             background: var(--gold-gradient); color: var(--gelap); padding: 1mm;
-            border: 1px solid rgba(0,0,0,0.2); border-radius: 1mm;
+            border: 1px solid rgba(240, 5, 5, 0.2); border-radius: 1mm;
             font-weight: 700; text-transform: uppercase; font-size: 2.8mm;
             text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.5);
             letter-spacing: 0.3px;
@@ -197,24 +258,23 @@ window.$RefreshSig$ = () => (type) => type;</script>
         .data-grid {
             flex-grow: 1; display: grid; font-size: 2mm;
             grid-template-columns: 26mm auto 1fr;
-            gap: 0.5mm 2mm; align-items: center;
+            gap: 0.5mm 2mm; 
+            align-items: start; 
         }
-        .data-grid span:nth-child(3n-2) { font-weight: 600; color: var(--card-front-data-label-color); } /* Use new variable */
-        .data-grid span:nth-child(3n) { color: var(--card-front-data-value-color); text-shadow: 1px 1px 2px rgba(0,0,0,0.5); } /* Use new variable */
+        .data-grid span:nth-child(3n-2) { font-weight: 600; color: var(--card-front-data-label-color); }
+        .data-grid span:nth-child(3n) { color: var(--card-front-data-value-color); text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
         .data-grid .alamat-value {
-            word-wrap: break-word; /* Allows long words to break and wrap */
-            overflow-wrap: break-word; /* Ensures words break at character level if needed */
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         .photo-area { text-align: right; }
         .photo-box {
             width: 20mm; height: 25mm;
-            background-color: #ccc; border: 1.5px solid;
-            border-image-slice: 1; border-image-source: var(--gold-gradient);
             overflow: hidden; margin-bottom: 1.5mm; padding: 1px;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: rgba(0,0,0,0.1);
+            background-color: rgb(255, 255, 255);
         }
         .photo-box img {
             width: 100%; height: 100%; -o-object-fit: cover; object-fit: cover;
@@ -222,17 +282,17 @@ window.$RefreshSig$ = () => (type) => type;</script>
         }
         .expiry-date {
             font-size: 2mm; font-style: italic; text-align: center;
-            color: var(--card-front-expiry-color); /* Use new variable */
+            color: var(--card-front-expiry-color);
         }
         .id-box {
             background: var(--gold-gradient); color: var(--gelap);
             padding: 1.5mm 3mm;
             border: 1px solid rgba(0,0,0,0.2); border-radius: 1mm;
             font-weight: 700; text-align: center;
-            font-size: 2.8mm; /* Sesuaikan ukuran font jika perlu */
+            font-size: 2.8mm;
             width: -moz-fit-content;
-            width: fit-content; /* Biarkan lebar menyesuaikan konten */
-            max-width: 32mm; /* Batasi lebar jika terlalu panjang */
+            width: fit-content;
+            max-width: 32mm;
             position: absolute;
             bottom: 3mm;
             left: 5mm;
@@ -242,14 +302,11 @@ window.$RefreshSig$ = () => (type) => type;</script>
             display: flex;
             align-items: center;
             justify-content: center;
-            white-space: nowrap; /* Mencegah teks wrapping jika tidak ada spasi */
-            overflow: hidden; /* Sembunyikan jika overflow */
-            text-overflow: ellipsis; /* Tambahkan elipsis jika terpotong */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        .back-card .card-content {
-            align-items: center; justify-content: space-between;
-            padding-top: 4mm; padding-bottom: 4mm;
-        }
+        
         .back-card-header {
             text-align: center;
             line-height: 1.3;
@@ -259,13 +316,13 @@ window.$RefreshSig$ = () => (type) => type;</script>
             font-weight: 700;
             font-size: 2.8mm;
             text-transform: uppercase;
-            color: var(--card-back-member-name-color); /* Use new variable */
+            color: var(--card-back-member-name-color);
         }
         .party-name-box {
             font-weight: 700;
             font-size: 3.0mm;
             text-transform: uppercase;
-            color: var(--card-back-party-name-color); /* Use new variable */
+            color: var(--card-back-party-name-color);
         }
         .back-images {
             display: flex;
@@ -279,10 +336,6 @@ window.$RefreshSig$ = () => (type) => type;</script>
             width: 20mm;
             height: 25mm;
             margin-bottom: 0;
-            background-color: #ccc;
-            border: 1.5px solid;
-            border-image-slice: 1;
-            border-image-source: var(--gold-gradient);
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -319,51 +372,54 @@ window.$RefreshSig$ = () => (type) => type;</script>
             margin-left: auto;
             flex-grow: 1;
             justify-content: flex-end;
-            max-width: 350px; /* Batasi lebar search filter */
+            max-width: 350px;
         }
         .search-filter label {
             margin-bottom: 0;
             font-weight: 600;
-            color: var(--gelap);
+            color: var(--text-color);
         }
         .search-filter input[type="text"] {
             padding: 8px 12px;
-            border: 1px solid #ced4da;
+            border: 1px solid var(--input-border);
             border-radius: 4px;
             font-size: 0.95em;
             min-width: 150px;
             flex-grow: 1;
+            background-color: var(--container-bg);
+            color: var(--text-color);
         }
         .search-filter input:focus {
             border-color: var(--hijau-utama);
-            box-shadow: 0 0 0 3px rgba(0, 105, 92, 0.2);
+            box-shadow: 0 0 0 3px var(--input-focus-shadow);
             outline: none;
         }
         .rekap-table-wrapper {
             max-height: 600px;
-            overflow-y: auto; border: 1px solid #dee2e6; border-radius: 8px;
-            background-color: var(--putih);
+            overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px;
+            background-color: var(--container-bg);
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e9ecef; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); color: var(--text-color); }
         th {
-            background-color: var(--hijau-gelap);
-            color: var(--putih);
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
             position: sticky; top: 0; z-index: 2;
             font-weight: 700;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        tr:nth-child(even) { background-color: #fdfdfd; }
-        tr:hover { background-color: #f0f0f0; }
+        tr:nth-child(even) { background-color: var(--table-row-even-bg); }
+        tr:hover { background-color: var(--table-row-hover-bg); }
 
-        /* Styling untuk checkbox di tabel */
         td input[type="checkbox"] {
             width: 18px;
             height: 18px;
             margin-right: 5px;
             vertical-align: middle;
             cursor: pointer;
-            accent-color: var(--hijau-utama); /* Warna centang */
+            accent-color: var(--hijau-utama);
         }
 
         .action-buttons button {
@@ -395,8 +451,9 @@ window.$RefreshSig$ = () => (type) => type;</script>
         }
         .category-list li {
             padding: 8px;
-            border-bottom: 1px solid #e9ecef;
+            border-bottom: 1px solid var(--border-color);
             font-size: 0.95em;
+            transition: border-color 0.3s ease;
         }
         #print-area { display: none; }
         
@@ -406,10 +463,11 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 font-family: 'Arial', sans-serif;
                 margin: 0;
                 background-color: white;
-                color: black;
+                color: rgb(254, 254, 254);
             }
             .sidebar,
-            .main-content > *:not(#print-area) {
+            .main-content > *:not(#print-area),
+            #darkModeToggleSidebar { /* Sembunyikan tombol dark mode saat mencetak */
                 display: none !important;
             }
             #print-area {
@@ -425,29 +483,29 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 width: -moz-fit-content;
                 width: fit-content;
             }
+
             .card-container {
                 box-shadow: none;
-                border: 2px solid;
-                border-image-slice: 1;
-                border-image-source: var(--card-front-border-image); /* Use new variable */
                 margin: 0;
                 transform-origin: top left;
-                width: var(--lebar-kartu);
-                height: var(--tinggi-kartu);
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-                background: var(--card-front-bg); /* Use new variable */
-                color: var(--card-front-text-color); /* Use new variable */
-            }
-            .card-container.back-card {
-                background: var(--card-back-bg); /* Use new variable for back card */
-                color: var(--card-back-text-color); /* Use new variable for back card */
-                border-image-source: var(--card-back-border-image); /* Use new variable for back card */
+                padding: 2px;
+                background: var(--gold-gradient);
+                border-radius: 4mm;
             }
             .card-content {
                 padding: 3mm;
                 font-size: 0.92em;
+                background: var(--card-front-bg);
+                color: var(--card-front-text-color);
+                border-radius: calc(4mm - 2px);
             }
+            .back-card .card-content {
+                background: var(--card-back-bg);
+                color: var(--card-back-text-color);
+            }
+            
             .title-box, .id-box, .tagline-box {
                 background: var(--gold-gradient);
                 color: var(--gelap);
@@ -462,13 +520,13 @@ window.$RefreshSig$ = () => (type) => type;</script>
 
             @page {
                 size: A4 portrait;
-                margin: 9.55mm 18.4mm;
+                margin: 5mm 18.4mm;
             }
             .print-page {
                 page-break-after: always;
                 display: flex !important;
                 flex-wrap: wrap;
-                gap: 2mm 2mm; /* Jarak vertikal 2mm, horizontal 2mm */
+                gap: 2mm 2mm;
                 justify-content: flex-start;
                 align-items: flex-start;
                 align-content: flex-start;
@@ -476,7 +534,6 @@ window.$RefreshSig$ = () => (type) => type;</script>
             }
         }
 
-        /* Responsive adjustments for smaller screens */
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
@@ -491,7 +548,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             }
             .sidebar-header {
-                display: none; /* Hide header on small screens */
+                display: none;
             }
             .sidebar-menu {
                 flex-direction: row;
@@ -507,10 +564,10 @@ window.$RefreshSig$ = () => (type) => type;</script>
             }
             .sidebar-menu li a.active {
                 border-left: none;
-                border-bottom-color: #f1e05a;
+                border-bottom-color: #eed309;
             }
             .sidebar-menu li a span {
-                display: none; /* Hide text, show only icon on small screens */
+                display: none;
             }
             .sidebar-menu li a svg {
                 width: 20px;
@@ -541,10 +598,10 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 max-width: none;
             }
             .rekap-table-wrapper {
-                overflow-x: auto; /* Allow horizontal scrolling for table */
+                overflow-x: auto;
             }
             table {
-                min-width: 600px; /* Ensure table is wide enough */
+                min-width: 600px;
             }
             .card-preview-area {
                 flex-direction: column;
@@ -552,10 +609,8 @@ window.$RefreshSig$ = () => (type) => type;</script>
             }
         }
 
-        /* New styles for login form */
         .login-container {
-            /* Mengambil seluruh ruang yang tersedia di body */
-            position: fixed; /* Menggunakan fixed agar tidak terpengaruh oleh layout flex body */
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -563,17 +618,19 @@ window.$RefreshSig$ = () => (type) => type;</script>
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: var(--abu-terang);
-            z-index: 1000; /* Pastikan di atas elemen lain */
+            background-color: var(--login-bg);
+            z-index: 1000;
+            transition: background-color 2s ease-in-out;
         }
         .login-box {
-            background-color: var(--putih);
+            background-color: var(--login-box-bg);
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 400px;
             text-align: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
         .login-box h2 {
             color: var(--hijau-gelap);
@@ -588,12 +645,15 @@ window.$RefreshSig$ = () => (type) => type;</script>
         .login-box .form-group label {
             font-size: 1em;
             margin-bottom: 10px;
+            color: var(--text-color);
         }
         .login-box .form-group input {
             padding: 12px;
             font-size: 1.1em;
             border-radius: 8px;
-            border: 1px solid #ced4da;
+            border: 1px solid var(--input-border);
+            background-color: var(--container-bg);
+            color: var(--text-color);
         }
         .login-box .btn-primary {
             width: 100%;
@@ -605,6 +665,48 @@ window.$RefreshSig$ = () => (type) => type;</script>
             color: #dc3545;
             margin-top: 15px;
             font-weight: 600;
+        }
+
+        /* Digital Clock Styling */
+        .digital-clock {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--sidebar-text);
+            margin-top: 10px;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            width: 100%; /* Ensure it takes full width */
+        }
+        body.dark-mode .digital-clock {
+            color: var(--sidebar-text); /* Ensure clock color adapts to dark mode */
+        }
+
+        /* Dark Mode Toggle Button (Sidebar) */
+        #darkModeToggleSidebar {
+            margin-top: 10px;
+            margin-bottom: 15px;
+            padding: 8px 15px;
+            background-color: var(--sidebar-active-bg);
+            color: var(--sidebar-active-text);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        #darkModeToggleSidebar:hover {
+            background-color: var(--hijau-gelap);
+            color: var(--putih);
+        }
+        #darkModeToggleSidebar svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
         }
     </style>
 </head>
@@ -629,7 +731,17 @@ window.$RefreshSig$ = () => (type) => type;</script>
     </div>
 
     <nav class="sidebar hidden" aria-label="Navigasi utama" id="app-sidebar">
-        <div class="sidebar-header"><h3>Dasbor KPS</h3></div>
+        <div class="sidebar-header">
+            <h3>Dasbor KPS</h3>
+            <div id="digitalClock" class="digital-clock"></div> <!-- Digital Clock Element -->
+            <!-- Dark Mode Toggle Button (Sidebar) -->
+            <button id="darkModeToggleSidebar" aria-label="Toggle dark mode">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.183a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 001.06 1.06l1.591-1.59zM12 18.75a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V19.5a.75.75 0 01.75-.75zM4.929 6.183a.75.75 0 00-1.06 1.06l1.59 1.59a.75.75 0 101.06-1.06L4.929 6.183zm13.432 5.714a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H19.5a.75.75 0 01-.75-.75zM4.5 12a.75.75 0 01-.75-.75H2.25a.75.75 0 010-1.5H3.75a.75.75 0 01.75.75zM6.183 18.894a.75.75 0 001.06-1.06l-1.59-1.59a.75.75 0 00-1.06 1.06l1.59 1.59z" />
+                </svg>
+                <span>Mode Gelap</span>
+            </button>
+        </div>
         <ul class="sidebar-menu">
             <li><a href="#input" class="nav-link active" aria-current="page">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
@@ -640,7 +752,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 <span>Rekap Data</span>
             </a></li>
             <li><a href="#pengaturan" class="nav-link">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.30-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17-.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42.12.64l2 3.46c.12.22.39.30.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.30-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17-.59-1.69-.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42.12.64l2 3.46c.12.22.39.30.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59-1.69-.98l2.49 1c.23.09.49 0 .61.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
                 <span>Pengaturan Kartu</span>
             </a></li>
             <li><a href="#" id="logout-link" class="nav-link">
@@ -661,6 +773,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                         <div class="form-group"><label for="jenis_kelamin">Jenis Kelamin</label><select id="jenis_kelamin" required aria-required="true"><option value="">Pilih...</option><option>Laki-laki</option><option>Perempuan</option></select></div>
                         <div class="form-group"><label for="tempat_lahir">Tempat Lahir</label><input type="text" id="tempat_lahir" required aria-required="true"></div>
                         <div class="form-group"><label for="tanggal_lahir">Tanggal Lahir</label><input type="date" id="tanggal_lahir" required aria-required="true"></div>
+                        <div class="form-group"><label for="kecamatan">Kecamatan</label><select id="kecamatan" required aria-required="true"><option value="">Pilih...</option><option>Jongkat</option><option>Segedong</option></select></div>
                         <div class="form-group"><label for="alamat">Alamat</label><textarea id="alamat" rows="3" required aria-required="true"></textarea></div>
                         <div class="form-group"><label for="foto_pendukung_upload">Foto Pendukung (2x2.5 cm)</label><input type="file" id="foto_pendukung_upload" accept="image/*" aria-describedby="foto-help"></div>
                         <small id="foto-help" class="form-text text-muted">Unggah foto berukuran 2x2.5 cm untuk kartu pendukung.</small>
@@ -686,6 +799,8 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 <h2>Rekapitulasi Data Pendukung</h2>
                 <div class="rekap-filters">
                     <button class="btn btn-primary filter-btn" data-filter="semua" aria-label="Tampilkan semua data pendukung">Semua</button>
+                    <button class="btn btn-secondary filter-btn" data-filter="Jongkat" aria-label="Tampilkan pendukung Kecamatan Jongkat">Jongkat</button>
+                    <button class="btn btn-secondary filter-btn" data-filter="Segedong" aria-label="Tampilkan pendukung Kecamatan Segedong">Segedong</button>
                     <button class="btn btn-secondary filter-btn" data-filter="Pemula" aria-label="Tampilkan pendukung usia pemula">Pemula (17-35)</button>
                     <button class="btn btn-secondary filter-btn" data-filter="Dewasa" aria-label="Tampilkan pendukung usia dewasa">Dewasa (36-60)</button>
                     <button class="btn btn-secondary filter-btn" data-filter="Senior" aria-label="Tampilkan pendukung usia senior">Senior (61-95)</button>
@@ -710,7 +825,9 @@ window.$RefreshSig$ = () => (type) => type;</script>
                                 <th>No</th>
                                 <th>ID Pendukung</th>
                                 <th>Nama</th>
-                                <th>NIK</th> <th>Alamat</th>
+                                <th>NIK</th> 
+                                <th>Kecamatan</th>
+                                <th>Alamat</th>
                                 <th>Usia</th>
                                 <th>Kategori</th>
                                 <th>Aksi</th>
@@ -718,7 +835,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                         </thead>
                         <tbody id="rekap-table-body">
                             <tr>
-                                <td colspan="9" style="text-align: center;">Memuat data...</td> </tr>
+                                <td colspan="10" style="text-align: center;">Memuat data...</td> </tr>
                         </tbody>
                     </table>
                 </div>
@@ -762,17 +879,16 @@ window.$RefreshSig$ = () => (type) => type;</script>
                             <input type="color" id="setting_back_card_text_color" value="#ffffff">
                         </div>
                         <div class="form-group">
-                            <label for="next-id-counter-display">Nomor ID Pendukung Berikutnya</label>
-                            <div style="display: flex; gap: 10px; align-items: center;">
-                                <input type="text" id="next-id-counter-display" readonly aria-readonly="true" style="background-color: #e9ecef;">
-                                <button type="button" id="reset-next-id-btn" class="btn btn-danger" aria-label="Reset nomor ID pendukung berikutnya">Reset ID</button>
+                            <label>Nomor ID Pendukung Berikutnya</label>
+                            <div id="next-id-counters">
+                                <!-- Counters for each district will be rendered here by JS -->
                             </div>
                         </div>
                         <small id="dprd-photo-help" class="form-text text-muted">Unggah foto anggota DPRD berukuran 2x2.5 cm.</small>
                         <small id="pkb-logo-help" class="form-text text-muted">Unggah logo partai berukuran 2x2.5 cm.</small>
                     </div>
                     <div class="form-buttons">
-                        <button id="save-settings-btn" class="btn btn-primary" aria-label="Simpan pengaturan kartu">Simpan Pengaturan</button>
+                        <button type="button" id="save-settings-btn" class="btn btn-primary" aria-label="Simpan pengaturan kartu">Simpan Pengaturan</button>
                     </div>
                 </form>
             </div>
@@ -793,7 +909,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                         <span>Usia</span><span>:</span><span data-field="usia"></span>
                     </div>
                     <div class="photo-area">
-                        <div class="photo-box"><img data-field="foto" src="" alt="Foto Pendukung"></div>
+                        <div class="photo-box"><img data-field="foto" src="" alt="Foto Pendukung" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/84ce1a16-2d0e-4e47-990f-d997e304cb2a.png"></div>
                         <div class="expiry-date">Berlaku Sejak: <span data-field="berlaku"></span></div>
                     </div>
                 </div>
@@ -808,10 +924,10 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 </div>
                 <div class="back-images">
                     <div class="image-item">
-                        <div class="photo-box"><img data-field="dprdPhoto" src="" alt="Foto Anggota DPRD"></div>
+                        <div class="photo-box"><img data-field="dprdPhoto" src="" alt="Foto Anggota DPRD" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c4c1ac93-384a-49bd-885e-6abcca155fa7.png"></div>
                     </div>
                     <div class="image-item">
-                        <div class="photo-box"><img data-field="pkbLogo" src="" alt="Logo PKB"></div>
+                        <div class="photo-box"><img data-field="pkbLogo" src="" alt="Logo PKB" src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/0c43865b-9515-4657-969a-f99d8a81cb24.png"></div>
                     </div>
                 </div>
                 <div class="tagline-box">BERSAMA MENUJU KEMENANGAN</div>
@@ -822,6 +938,9 @@ window.$RefreshSig$ = () => (type) => type;</script>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // --- PENAMBAHAN VARIABEL UNTUK ANIMASI LOGIN ---
+        let loginBgInterval = null;
+
         // --- APPLICATION STATE & CONFIGURATION ---
         const appState = {
             db: {
@@ -831,12 +950,15 @@ window.$RefreshSig$ = () => (type) => type;</script>
                     pkbLogoUrl: null,
                     namaAnggotaDPRD: 'Nama Anggota DPRD',
                     cardTitle: 'KARTU LOYALIS PENDUKUNG SETIA',
-                    nextIdCounter: 1,
                     // New color settings
                     frontCardColor: '#00695c', // Default green
                     backCardColor: '#00695c',  // Default green
                     frontCardTextColor: '#ffffff', // Default white
-                    backCardTextColor: '#ffffff'  // Default white
+                    backCardTextColor: '#ffffff',  // Default white
+                    nextIdCounters: { // New structure for ID counters per district
+                        'Jongkat': 1,
+                        'Segedong': 1
+                    }
                 }
             },
             constants: {
@@ -845,7 +967,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 PLACEHOLDER_PHOTO_URL: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23ccc"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>', // Placeholder SVG Base64
                 PLACEHOLDER_LOGO_URL: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%23ccc"><path d="M12 2L4 5v6c0 5.55 3.84 10.74 9 12 3.82-1.07 6.42-3.83 7.42-7.25C20.66 11.23 20 8.07 20 5l-8-3z"/></svg>' // Placeholder SVG Base64
             },
-            currentFilter: 'semua',
+            currentFilter: 'semua', // Can be 'semua', 'Jongkat', 'Segedong', 'Pemula', 'Dewasa', 'Senior'
             currentSearchTerm: ''
         };
 
@@ -859,6 +981,8 @@ window.$RefreshSig$ = () => (type) => type;</script>
             appSidebar: document.getElementById('app-sidebar'),
             appMainContent: document.getElementById('app-main-content'),
             logoutLink: document.getElementById('logout-link'),
+            darkModeToggleSidebar: document.getElementById('darkModeToggleSidebar'), // Sidebar dark mode toggle
+            digitalClock: document.getElementById('digitalClock'),
 
             navLinks: document.querySelectorAll('.nav-link'),
             pages: document.querySelectorAll('.page'),
@@ -870,6 +994,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
             jenisKelaminSelect: document.getElementById('jenis_kelamin'),
             tempatLahirInput: document.getElementById('tempat_lahir'),
             tanggalLahirInput: document.getElementById('tanggal_lahir'),
+            kecamatanSelect: document.getElementById('kecamatan'), // New
             alamatInput: document.getElementById('alamat'),
             fotoPendukungUpload: document.getElementById('foto_pendukung_upload'),
 
@@ -898,8 +1023,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
             searchInput: document.getElementById('search-input'),
             exportCSVBtn: document.getElementById('exportCSVBtn'),
             categoryDetailsContainer: document.getElementById('category-details'),
-            nextIdCounterDisplay: document.getElementById('next-id-counter-display'),
-            resetNextIdBtn: document.getElementById('reset-next-id-btn')
+            nextIdCountersDiv: document.getElementById('next-id-counters') // Modified
         };
 
         // --- UTILITY FUNCTIONS ---
@@ -924,14 +1048,33 @@ window.$RefreshSig$ = () => (type) => type;</script>
             return 'N/A';
         };
 
+        /**
+         * MODIFIED FUNCTION
+         * Formats a date string (YYYY-MM-DD) into MM/DD/YYYY format.
+         * Handles timezone offsets to prevent date inaccuracies.
+         */
         const formatDate = (dateString) => {
             if (!dateString) return '';
             try {
+                // The HTML date input provides the date in 'YYYY-MM-DD' format.
+                // Creating a new Date from this string (e.g., new Date('1994-12-21'))
+                // interprets it as midnight UTC. In timezones west of UTC, this can
+                // result in the previous day when using local date methods like getDate().
+                // To handle this robustly, we get the local timezone offset and adjust.
                 const date = new Date(dateString);
-                const options = { day: '2-digit', month: 'long', year: 'numeric' };
-                return date.toLocaleDateString('id-ID', options).replace(/\./g, '');
+                if (isNaN(date.getTime())) throw new Error('Invalid Date');
+
+                const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+                const localDate = new Date(date.getTime() + userTimezoneOffset);
+
+                const month = String(localDate.getMonth() + 1).padStart(2, '0'); // getMonth() is 0-indexed
+                const day = String(localDate.getDate()).padStart(2, '0');
+                const year = localDate.getFullYear();
+                
+                // Format as MM/DD/YYYY as requested
+                return `${month}/${day}/${year}`;
             } catch (error) {
-                console.error("Error formatting date:", error);
+                console.error("Error formatting date:", dateString, error);
                 return 'Tanggal tidak valid';
             }
         };
@@ -991,22 +1134,17 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 if (!appState.db.settings.frontCardTextColor) appState.db.settings.frontCardTextColor = '#ffffff';
                 if (!appState.db.settings.backCardTextColor) appState.db.settings.backCardTextColor = '#ffffff';
 
-
-                // Muat nextIdCounter atau hitung jika tidak ada
-                if (appState.db.settings.nextIdCounter === undefined || appState.db.settings.nextIdCounter < 1) {
-                    if (appState.db.pendukung.length > 0) {
-                        const maxIdNum = appState.db.pendukung.reduce((max, p) => {
-                            const match = p.no_pendukung ? p.no_pendukung.match(/PKB-LOYAL-(\d+)/) : null;
-                            if (match && match[1]) {
-                                return Math.max(max, parseInt(match[1], 10));
-                            }
-                            return max;
-                        }, 0);
-                        appState.db.settings.nextIdCounter = maxIdNum + 1;
-                    } else {
-                        appState.db.settings.nextIdCounter = 1;
-                    }
+                // Initialize nextIdCounters if not present or ensure all districts have a counter
+                if (!appState.db.settings.nextIdCounters) {
+                    appState.db.settings.nextIdCounters = {};
                 }
+                // Ensure all defined districts have a counter, initialize to 1 if missing
+                ['Jongkat', 'Segedong'].forEach(district => {
+                    if (appState.db.settings.nextIdCounters[district] === undefined) {
+                        appState.db.settings.nextIdCounters[district] = 1;
+                    }
+                });
+
             } else {
                 appState.db = {
                     pendukung: [],
@@ -1015,20 +1153,16 @@ window.$RefreshSig$ = () => (type) => type;</script>
                         pkbLogoUrl: appState.constants.PLACEHOLDER_LOGO_URL,
                         namaAnggotaDPRD: 'Nama Anggota DPRD',
                         cardTitle: 'KARTU LOYALIS PENDUKUNG SETIA',
-                        nextIdCounter: 1,
                         frontCardColor: '#00695c',
                         backCardColor: '#00695c',
                         frontCardTextColor: '#ffffff',
-                        backCardTextColor: '#ffffff'
+                        backCardTextColor: '#ffffff',
+                        nextIdCounters: {
+                            'Jongkat': 1,
+                            'Segedong': 1
+                        }
                     }
                 };
-                // Tambahkan beberapa data contoh untuk testing
-                appState.db.pendukung.push(
-                    { id: 1, no_pendukung: "PKB-LOYAL-0001", nama: "Budi Santoso", nik: "3171010101800001", jenis_kelamin: "Laki-laki", tempat_lahir: "Surabaya", tanggal_lahir: "1990-05-15", alamat: "Jl. Merdeka No. 123, Surabaya", usia: calculateAge("1990-05-15"), fotoUrl: null },
-                    { id: 2, no_pendukung: "PKB-LOYAL-0002", nama: "Siti Aisyah", nik: "3171010101600003", jenis_kelamin: "Perempuan", tempat_lahir: "Bandung", tanggal_lahir: "1960-07-10", alamat: "Jl. Asia Afrika No. 10, Bandung", usia: calculateAge("1960-07-10"), fotoUrl: null },
-                    { id: 3, no_pendukung: "PKB-LOYAL-0003", nama: "Joko Widodo", nik: "3171010101400004", jenis_kelamin: "Laki-laki", tempat_lahir: "Yogyakarta", tanggal_lahir: "1940-12-25", alamat: "Jl. Malioboro No. 22, Yogyakarta", usia: calculateAge("1940-12-25"), fotoUrl: null }
-                );
-                appState.db.settings.nextIdCounter = 4;
                 saveAppStateToLocalStorage();
             }
             updateNextIdDisplay();
@@ -1036,8 +1170,33 @@ window.$RefreshSig$ = () => (type) => type;</script>
         };
 
         const updateNextIdDisplay = () => {
-            if (domElements.nextIdCounterDisplay) {
-                domElements.nextIdCounterDisplay.value = `PKB-LOYAL-${String(appState.db.settings.nextIdCounter).padStart(4, '0')}`;
+            if (domElements.nextIdCountersDiv) {
+                domElements.nextIdCountersDiv.innerHTML = ''; // Clear previous content
+                for (const district in appState.db.settings.nextIdCounters) {
+                    const counterValue = appState.db.settings.nextIdCounters[district];
+                    const displayValue = `PKB-LOYAL-${String(counterValue).padStart(4, '0')}`;
+
+                    const counterHtml = `
+                        <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 5px;">
+                            <label style="min-width: 80px;">${district}:</label>
+                            <input type="text" value="${displayValue}" readonly aria-readonly="true" style="background-color: var(--container-bg); color: var(--text-color); flex-grow: 1; border: 1px solid var(--input-border);">
+                            <button type="button" class="btn btn-danger reset-next-id-btn" data-district="${district}" aria-label="Reset nomor ID untuk ${district}">Reset ID</button>
+                        </div>
+                    `;
+                    domElements.nextIdCountersDiv.insertAdjacentHTML('beforeend', counterHtml);
+                }
+                // Re-attach event listeners for newly created buttons
+                document.querySelectorAll('.reset-next-id-btn').forEach(button => {
+                    button.onclick = (e) => {
+                        const district = e.target.dataset.district;
+                        if (confirm(`PERINGATAN: Anda akan mereset nomor ID pendukung untuk ${district} ke 'PKB-LOYAL-0001'. Ini mungkin menyebabkan duplikasi ID jika ada pendukung yang ID-nya sudah terpakai sebelumnya. Lanjutkan?`)) {
+                            appState.db.settings.nextIdCounters[district] = 1;
+                            saveAppStateToLocalStorage();
+                            updateNextIdDisplay();
+                            alert(`Nomor ID pendukung untuk ${district} telah direset ke PKB-LOYAL-0001.`);
+                        }
+                    };
+                });
             }
         };
 
@@ -1049,20 +1208,17 @@ window.$RefreshSig$ = () => (type) => type;</script>
             root.style.setProperty('--card-front-text-color', appState.db.settings.frontCardTextColor);
             root.style.setProperty('--card-back-text-color', appState.db.settings.backCardTextColor);
             // Adjust data label/value colors based on front card text color for better contrast
-            // This is a simple heuristic, might need more complex logic for perfect contrast
             const isFrontTextLight = isColorLight(appState.db.settings.frontCardTextColor);
-            root.style.setProperty('--card-front-data-label-color', isFrontTextLight ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)');
-            root.style.setProperty('--card-front-data-value-color', isFrontTextLight ? 'rgba(255,255,255,0.95)' : 'rgba(0,0,0,0.95)');
-            root.style.setProperty('--card-front-expiry-color', isFrontTextLight ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)');
+            root.style.setProperty('--card-front-data-label-color', isFrontTextLight ? '#ffffff' : 'rgba(0,0,0,0.8)');
+            root.style.setProperty('--card-front-data-value-color', isFrontTextLight ? '#ffffff' : 'rgba(0,0,0,0.95)');
+            root.style.setProperty('--card-front-expiry-color', isFrontTextLight ? '#ffffff' : 'rgba(0,0,0,0.8)');
             root.style.setProperty('--card-back-party-name-color', appState.db.settings.backCardTextColor);
             root.style.setProperty('--card-back-member-name-color', appState.db.settings.backCardTextColor);
         };
 
         // Helper function to determine if a color is light or dark (for text contrast)
         const isColorLight = (hexColor) => {
-            // Handle cases where hexColor might be a gradient or invalid
             if (!hexColor || !hexColor.startsWith('#') || hexColor.length !== 7) {
-                // Fallback for non-hex colors or gradients, assume a default contrast
                 return true; // Assume light text is needed for default dark backgrounds
             }
             const r = parseInt(hexColor.substring(1, 3), 16);
@@ -1091,7 +1247,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 ttl: `${data.tempat_lahir || ''}, ${formatDate(data.tanggal_lahir)}`,
                 usia: `${data.usia !== undefined && data.usia !== null ? data.usia : '-'} Tahun`,
                 alamat: data.alamat || '',
-                berlaku: formatDate(new Date().toISOString().split('T')[0]), // Format tanggal hari ini
+                berlaku: formatDate(new Date().toISOString().split('T')[0]),
                 foto: data.fotoUrl || appState.constants.PLACEHOLDER_PHOTO_URL,
                 dprdPhoto: appState.db.settings.dprdPhotoUrl || appState.constants.PLACEHOLDER_PHOTO_URL,
                 pkbLogo: appState.db.settings.pkbLogoUrl || appState.constants.PLACEHOLDER_LOGO_URL,
@@ -1099,22 +1255,23 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 cardTitle: appState.db.settings.cardTitle || 'KARTU LOYALIS PENDUKUNG SETIA'
             };
 
-            // Apply dynamic colors directly to the cloned card elements
-            // This is crucial for html2canvas to capture the correct styles
-            if (cardClone.classList.contains('front-card')) {
-                cardClone.style.background = appState.db.settings.frontCardColor; // Use background for solid color
-                cardClone.style.color = appState.db.settings.frontCardTextColor;
-                // Update specific text elements for front card
-                const isFrontTextLight = isColorLight(appState.db.settings.frontCardTextColor);
-                cardClone.querySelectorAll('.data-grid span:nth-child(3n-2)').forEach(el => el.style.color = isFrontTextLight ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)');
-                cardClone.querySelectorAll('.data-grid span:nth-child(3n)').forEach(el => el.style.color = isFrontTextLight ? 'rgba(255,255,255,0.95)' : 'rgba(0,0,0,0.95)');
-                cardClone.querySelector('.expiry-date').style.color = isFrontTextLight ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.8)';
-            } else if (cardClone.classList.contains('back-card')) {
-                cardClone.style.background = appState.db.settings.backCardColor; // Use background for solid color
-                cardClone.style.color = appState.db.settings.backCardTextColor;
-                // Update specific text elements for back card
-                cardClone.querySelector('.party-name-box').style.color = appState.db.settings.backCardTextColor;
-                cardClone.querySelector('.member-name-box').style.color = appState.db.settings.backCardTextColor;
+            // Apply dynamic colors directly to the cloned card elements for html2canvas
+            // This is handled by CSS variables now, but we can override for extra safety in html2canvas
+            const content = cardClone.querySelector('.card-content');
+            if (content) {
+                 if (cardClone.classList.contains('front-card')) {
+                    content.style.background = appState.db.settings.frontCardColor;
+                    content.style.color = appState.db.settings.frontCardTextColor;
+                    const isFrontTextLight = isColorLight(appState.db.settings.frontCardTextColor);
+                    content.querySelectorAll('.data-grid span:nth-child(3n-2)').forEach(el => el.style.color = isFrontTextLight ? '#ffffff' : 'rgba(0,0,0,0.8)');
+                    content.querySelectorAll('.data-grid span:nth-child(3n)').forEach(el => el.style.color = isFrontTextLight ? '#ffffff' : 'rgba(0,0,0,0.95)');
+                    content.querySelector('.expiry-date').style.color = isFrontTextLight ? '#ffffff' : 'rgba(0,0,0,0.8)';
+                } else if (cardClone.classList.contains('back-card')) {
+                    content.style.background = appState.db.settings.backCardColor;
+                    content.style.color = appState.db.settings.backCardTextColor;
+                    content.querySelector('.party-name-box').style.color = appState.db.settings.backCardTextColor;
+                    content.querySelector('.member-name-box').style.color = appState.db.settings.backCardTextColor;
+                }
             }
 
 
@@ -1148,27 +1305,36 @@ window.$RefreshSig$ = () => (type) => type;</script>
             if (frontCardElement) {
                 domElements.reviewFrontContainer.appendChild(frontCardElement);
             } else {
-                domElements.reviewFrontContainer.innerHTML = `<p style="text-align: center; width: 100%; padding: 20px; color: var(--gelap);">Pratinjau Kartu Depan Gagal Dimuat.</p>`;
+                domElements.reviewFrontContainer.innerHTML = `<p style="text-align: center; width: 100%; padding: 20px; color: var(--text-color);">Pratinjau Kartu Depan Gagal Dimuat.</p>`;
             }
 
             const backCardElement = createCardElement('backCardTemplate', pendukungData);
             if (backCardElement) {
                 domElements.reviewBackContainer.appendChild(backCardElement);
             } else {
-                domElements.reviewBackContainer.innerHTML = `<p style="text-align: center; width: 100%; padding: 20px; color: var(--gelap);">Pratinjau Kartu Belakang Gagal Dimuat.</p>`;
+                domElements.reviewBackContainer.innerHTML = `<p style="text-align: center; width: 100%; padding: 20px; color: var(--text-color);">Pratinjau Kartu Belakang Gagal Dimuat.</p>`;
             }
         };
 
         // --- TABLE RENDERING FUNCTIONS ---
 
-        let ageChartInstance; // Deklarasi di luar fungsi agar bisa dihancurkan
+        let ageChartInstance;
 
         const renderRecapTable = () => {
             domElements.recapTableBody.innerHTML = '';
 
             const filteredPendukung = appState.db.pendukung.filter(pendukung => {
-                const matchesCategory = (appState.currentFilter === 'semua') || (getAgeCategory(pendukung.usia) === appState.currentFilter);
-                if (!matchesCategory) return false;
+                let matchesFilter = true;
+
+                const ageCategory = getAgeCategory(pendukung.usia);
+                if (['Pemula', 'Dewasa', 'Senior'].includes(appState.currentFilter)) {
+                    matchesFilter = (ageCategory === appState.currentFilter);
+                } 
+                else if (['Jongkat', 'Segedong'].includes(appState.currentFilter)) {
+                    matchesFilter = (pendukung.kecamatan === appState.currentFilter);
+                }
+                
+                if (!matchesFilter) return false;
 
                 if (appState.currentSearchTerm) {
                     const lowerSearchTerm = appState.currentSearchTerm.toLowerCase();
@@ -1176,22 +1342,23 @@ window.$RefreshSig$ = () => (type) => type;</script>
                         (pendukung.nik && pendukung.nik.toLowerCase().includes(lowerSearchTerm)) ||
                         (pendukung.no_pendukung && pendukung.no_pendukung.toLowerCase().includes(lowerSearchTerm)) ||
                         (pendukung.nama && pendukung.nama.toLowerCase().includes(lowerSearchTerm)) ||
-                        (pendukung.alamat && pendukung.alamat.toLowerCase().includes(lowerSearchTerm));
+                        (pendukung.alamat && pendukung.alamat.toLowerCase().includes(lowerSearchTerm)) ||
+                        (pendukung.kecamatan && pendukung.kecamatan.toLowerCase().includes(lowerSearchTerm));
                     return matchesSearch;
                 }
                 return true;
             });
 
             if (filteredPendukung.length === 0) {
-                domElements.recapTableBody.innerHTML = '<tr><td colspan="9" style="text-align: center;">Tidak ada data ditemukan.</td></tr>'; // colspan adjusted
+                domElements.recapTableBody.innerHTML = '<tr><td colspan="10" style="text-align: center;">Tidak ada data ditemukan.</td></tr>';
                 domElements.selectAllCheckbox.checked = false;
                 domElements.selectAllCheckbox.disabled = true;
-                renderAgeChart(); // Tetap render chart meskipun kosong
+                renderAgeChart(); 
                 renderCategoryDetails();
                 return;
             }
 
-            domElements.selectAllCheckbox.disabled = false; // Enable select all if there's data
+            domElements.selectAllCheckbox.disabled = false;
 
             filteredPendukung.forEach((pendukung, displayIndex) => {
                 const row = domElements.recapTableBody.insertRow();
@@ -1200,7 +1367,9 @@ window.$RefreshSig$ = () => (type) => type;</script>
                     <td>${displayIndex + 1}</td>
                     <td>${pendukung.no_pendukung || '-'}</td>
                     <td>${pendukung.nama || '-'}</td>
-                    <td>${pendukung.nik || '-'}</td> <td>${pendukung.alamat || '-'}</td>
+                    <td>${pendukung.nik || '-'}</td> 
+                    <td>${pendukung.kecamatan || '-'}</td>
+                    <td>${pendukung.alamat || '-'}</td>
                     <td>${pendukung.usia !== undefined && pendukung.usia !== null ? pendukung.usia : '-'}</td>
                     <td>${getAgeCategory(pendukung.usia)}</td>
                     <td class="action-buttons">
@@ -1229,7 +1398,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                     list.className = 'category-list';
                     pendukungInCategory.forEach(pendukung => {
                         const li = document.createElement('li');
-                        li.innerHTML = `<strong>${pendukung.nama}</strong> (ID: ${pendukung.no_pendukung}, NIK: ${pendukung.nik}, Usia: ${pendukung.usia})`;
+                        li.innerHTML = `<strong>${pendukung.nama}</strong> (ID: ${pendukung.no_pendukung}, NIK: ${pendukung.nik}, Usia: ${pendukung.usia}, Kecamatan: ${pendukung.kecamatan})`;
                         list.appendChild(li);
                     });
                     section.appendChild(list);
@@ -1288,7 +1457,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                         y: {
                             beginAtZero: true,
                             title: { display: true, text: 'Jumlah Pendukung' },
-                            ticks: { precision: 0 } // Hanya tampilkan bilangan bulat
+                            ticks: { precision: 0 }
                         },
                         x: {
                             title: { display: true, text: 'Kategori Usia' }
@@ -1310,9 +1479,9 @@ window.$RefreshSig$ = () => (type) => type;</script>
             domElements.formTitle.textContent = 'Tambah Pendukung Baru';
             domElements.submitBtn.classList.remove('hidden');
             domElements.updateBtn.classList.add('hidden');
-            domElements.fotoPendukungUpload.value = ''; // Clear file input
-            updateCardPreview({}); // Clear card preview
-            domElements.pendukungForm.dataset.currentPreviewData = ''; // Clear preview data
+            domElements.fotoPendukungUpload.value = '';
+            updateCardPreview({});
+            domElements.pendukungForm.dataset.currentPreviewData = '';
         };
 
         const handlePendukungFormSubmit = async (e) => {
@@ -1335,6 +1504,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 jenis_kelamin: domElements.jenisKelaminSelect.value,
                 tempat_lahir: domElements.tempatLahirInput.value.trim(),
                 tanggal_lahir: domElements.tanggalLahirInput.value,
+                kecamatan: domElements.kecamatanSelect.value,
                 alamat: domElements.alamatInput.value.trim(),
             };
             pendukungData.usia = calculateAge(pendukungData.tanggal_lahir);
@@ -1342,6 +1512,12 @@ window.$RefreshSig$ = () => (type) => type;</script>
             if (!validateNIK(pendukungData.nik)) {
                 alert('Format NIK tidak valid. NIK harus terdiri dari 16 digit angka.');
                 domElements.nikInput.focus();
+                return;
+            }
+            
+            if (!pendukungData.kecamatan) {
+                alert('Harap pilih Kecamatan.');
+                domElements.kecamatanSelect.focus();
                 return;
             }
 
@@ -1367,22 +1543,26 @@ window.$RefreshSig$ = () => (type) => type;</script>
             } else if (isEditing) {
                 const existingPendukung = appState.db.pendukung.find(p => p.id === existingId);
                 if (existingPendukung) {
-                    fotoUrl = existingPendukung.fotoUrl; // Gunakan foto lama jika tidak ada upload baru
+                    fotoUrl = existingPendukung.fotoUrl;
                 }
             }
             pendukungData.fotoUrl = fotoUrl;
 
 
             if (!isEditing) {
-                let newPendukungIdCounter = appState.db.settings.nextIdCounter;
-                let newPendukungNo = `PKB-LOYAL-${String(newPendukungIdCounter).padStart(4, '0')}`;
-
-                // Loop untuk mencari nomor ID berikutnya yang belum terpakai
-                while (appState.db.pendukung.some(p => p.no_pendukung === newPendukungNo)) {
-                    newPendukungIdCounter++;
-                    newPendukungNo = `PKB-LOYAL-${String(newPendukungIdCounter).padStart(4, '0')}`;
+                let currentDistrictCounter = appState.db.settings.nextIdCounters[pendukungData.kecamatan];
+                if (currentDistrictCounter === undefined) {
+                    currentDistrictCounter = 1;
                 }
-                appState.db.settings.nextIdCounter = newPendukungIdCounter + 1;
+                
+                let newPendukungNo = `PKB-LOYAL-${String(currentDistrictCounter).padStart(4, '0')}`;
+                
+                while (appState.db.pendukung.some(p => p.kecamatan === pendukungData.kecamatan && p.no_pendukung === newPendukungNo)) {
+                    currentDistrictCounter++;
+                    newPendukungNo = `PKB-LOYAL-${String(currentDistrictCounter).padStart(4, '0')}`;
+                }
+                
+                appState.db.settings.nextIdCounters[pendukungData.kecamatan] = currentDistrictCounter + 1;
 
                 pendukungData.id = appState.db.pendukung.length > 0 ? Math.max(...appState.db.pendukung.map(p => p.id || 0)) + 1 : 1;
                 pendukungData.no_pendukung = newPendukungNo;
@@ -1396,7 +1576,23 @@ window.$RefreshSig$ = () => (type) => type;</script>
                     return;
                 }
                 pendukungData.id = existingId;
-                pendukungData.no_pendukung = appState.db.pendukung[indexToUpdate].no_pendukung;
+                
+                if (appState.db.pendukung[indexToUpdate].kecamatan !== pendukungData.kecamatan) {
+                    let newDistrictCounter = appState.db.settings.nextIdCounters[pendukungData.kecamatan];
+                    if (newDistrictCounter === undefined) {
+                        newDistrictCounter = 1;
+                    }
+
+                    let newPendukungNo = `PKB-LOYAL-${String(newDistrictCounter).padStart(4, '0')}`;
+                    while (appState.db.pendukung.some(p => p.kecamatan === pendukungData.kecamatan && p.no_pendukung === newPendukungNo)) {
+                        newDistrictCounter++;
+                        newPendukungNo = `PKB-LOYAL-${String(newDistrictCounter).padStart(4, '0')}`;
+                    }
+                    appState.db.settings.nextIdCounters[pendukungData.kecamatan] = newDistrictCounter + 1;
+                    pendukungData.no_pendukung = newPendukungNo;
+                } else {
+                    pendukungData.no_pendukung = appState.db.pendukung[indexToUpdate].no_pendukung;
+                }
                 
                 appState.db.pendukung[indexToUpdate] = pendukungData;
                 alert('Data pendukung berhasil diperbarui!');
@@ -1405,12 +1601,12 @@ window.$RefreshSig$ = () => (type) => type;</script>
             saveAppStateToLocalStorage();
             renderRecapTable();
             resetPendukungForm();
-            updateNextIdDisplay(); // Update display after new ID is assigned
+            updateNextIdDisplay();
         };
 
         const exportPendukungToCSV = () => {
-            const headers = ['ID Internal', 'No Pendukung', 'Nama', 'NIK', 'Jenis Kelamin', 'Tempat Lahir', 'Tanggal Lahir', 'Alamat', 'Usia'];
-            const csvRows = [headers.map(h => `"${h.replace(/"/g, '""')}"`).join(',')]; // Ensure headers are quoted
+            const headers = ['ID Internal', 'No Pendukung', 'Nama', 'NIK', 'Jenis Kelamin', 'Tempat Lahir', 'Tanggal Lahir', 'Kecamatan', 'Alamat', 'Usia'];
+            const csvRows = [headers.map(h => `"${h.replace(/"/g, '""')}"`).join(',')];
 
             appState.db.pendukung.forEach(pendukung => {
                 const row = [
@@ -1421,6 +1617,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                     `"${(pendukung.jenis_kelamin || '-').replace(/"/g, '""')}"`,
                     `"${(pendukung.tempat_lahir || '-').replace(/"/g, '""')}"`,
                     `"${(pendukung.tanggal_lahir || '-').replace(/"/g, '""')}"`,
+                    `"${(pendukung.kecamatan || '-').replace(/"/g, '""')}"`,
                     `"${(pendukung.alamat || '-').replace(/"/g, '""')}"`,
                     pendukung.usia !== undefined && pendukung.usia !== null ? pendukung.usia : '-'
                 ];
@@ -1433,79 +1630,98 @@ window.$RefreshSig$ = () => (type) => type;</script>
             const a = document.createElement('a');
             a.href = url;
             a.download = 'data_pendukung_kps.csv';
-            document.body.appendChild(a); // Append to body for Firefox compatibility
+            document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         };
 
-        const downloadSelectedCards = () => {
+        const downloadSelectedCards = async () => {
             const selectedCheckboxes = document.querySelectorAll('.select-card-checkbox:checked');
             if (selectedCheckboxes.length === 0) {
                 alert('Harap pilih kartu yang ingin di-download terlebih dahulu.');
                 return;
             }
-            if (selectedCheckboxes.length > appState.constants.MAX_PRINT_PER_BATCH) {
-                alert(`Anda hanya dapat men-download maksimal ${appState.constants.MAX_PRINT_PER_BATCH} kartu dalam satu sesi.`);
-                return;
-            }
 
-            const printArea = document.createElement('div');
-            printArea.id = 'print-area';
+            alert(`Mempersiapkan PDF untuk ${selectedCheckboxes.length} kartu. Proses ini mungkin memakan waktu beberapa saat...`);
 
-            let currentPage = document.createElement('div');
-            currentPage.className = 'print-page';
-            printArea.appendChild(currentPage);
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
-            selectedCheckboxes.forEach(checkbox => {
+            const CARD_WIDTH_MM = 85.6;
+            const CARD_HEIGHT_MM = 53.98;
+            const GAP_MM = 2; // Gap between front and back card
+            const PAIR_WIDTH_MM = (CARD_WIDTH_MM * 2) + GAP_MM;
+
+            const PAGE_WIDTH = pdf.internal.pageSize.getWidth();
+            const PAGE_HEIGHT = pdf.internal.pageSize.getHeight();
+            const MARGIN_X = (PAGE_WIDTH - PAIR_WIDTH_MM) / 2; // Center the pair horizontally
+            const MARGIN_Y = 10;
+            const VERTICAL_SPACING = 5; // Space between rows of cards
+
+            let yPos = MARGIN_Y;
+            let cardCount = 0;
+
+            for (const checkbox of selectedCheckboxes) {
                 const cardId = parseInt(checkbox.value, 10);
                 const pendukungData = appState.db.pendukung.find(p => p.id === cardId);
-                if (!pendukungData) return;
+                if (!pendukungData) continue;
 
                 const frontCard = createCardElement('frontCardTemplate', pendukungData);
                 const backCard = createCardElement('backCardTemplate', pendukungData);
-                const duplexPair = document.createElement('div');
-                duplexPair.className = 'duplex-pair';
-                if (frontCard) duplexPair.appendChild(frontCard);
-                if (backCard) duplexPair.appendChild(backCard);
-                currentPage.appendChild(duplexPair);
-            });
 
-            const styles = document.querySelector('style').innerHTML;
-            const htmlToDownload = `
-                <!DOCTYPE html>
-                <html lang="id">
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Cetak Kartu Pendukung</title>
-                    <style>
-                        ${styles}
-                        body { background-color: #eee; padding: 20px; }
-                        #print-area { display: block !important; }
-                        .print-page {
-                            display: flex !important;
-                            flex-wrap: wrap;
-                            gap: 2mm 2mm;
-                            justify-content: center;
-                        }
-                    </style>
-                </head>
-                <body>
-                    ${printArea.outerHTML}
-                </body>
-                </html>
-            `;
+                if (!frontCard || !backCard) continue;
 
-            const blob = new Blob([htmlToDownload.trim()], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'kartu-pendukung.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+                // Create a temporary container to render the pair side-by-side
+                const tempContainer = document.createElement('div');
+                tempContainer.style.display = 'flex';
+                tempContainer.style.gap = `${GAP_MM}mm`;
+                tempContainer.style.width = 'fit-content'; // Let it size to its content
+                tempContainer.style.position = 'absolute';
+                tempContainer.style.left = '-9999px'; // Hide from view
+                tempContainer.style.top = '-9999px';
+                document.body.appendChild(tempContainer);
+                tempContainer.appendChild(frontCard);
+                tempContainer.appendChild(backCard);
 
+
+                try {
+                    // Check if adding this card will exceed the page height, if so, add a new page
+                    if (cardCount > 0 && yPos + CARD_HEIGHT_MM > PAGE_HEIGHT - MARGIN_Y) {
+                        pdf.addPage();
+                        yPos = MARGIN_Y; // Reset Y position for the new page
+                    }
+                    
+                    const canvas = await html2canvas(tempContainer, {
+                        scale: 3, // Higher scale for better quality
+                        useCORS: true,
+                        logging: false,
+                        backgroundColor: null // Use transparent background
+                    });
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+                    // Add the image of the card pair to the PDF, centered
+                    pdf.addImage(imgData, 'JPEG', MARGIN_X, yPos, PAIR_WIDTH_MM, CARD_HEIGHT_MM);
+
+                    // Update Y position for the next card pair
+                    yPos += CARD_HEIGHT_MM + VERTICAL_SPACING;
+                    cardCount++;
+
+                } catch (error) {
+                    console.error('Error generating card image for PDF:', error);
+                    alert('Gagal membuat gambar kartu untuk PDF. Pastikan semua gambar dimuat dengan benar.');
+                } finally {
+                    document.body.removeChild(tempContainer); // Clean up the temporary element
+                }
+            }
+
+            if (cardCount > 0) {
+                pdf.save('kartu-pendukung-terpilih.pdf');
+            } else {
+                alert('Tidak ada kartu yang berhasil diproses untuk PDF.');
+            }
+
+            // Uncheck all boxes after download is complete
             domElements.selectAllCheckbox.checked = false;
             document.querySelectorAll('.select-card-checkbox').forEach(cb => cb.checked = false);
         };
@@ -1575,46 +1791,40 @@ window.$RefreshSig$ = () => (type) => type;</script>
 
         const downloadPendukungToPDF = async () => {
             const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF('p', 'mm', 'a4'); // 'p' for portrait, 'mm' for millimeters, 'a4' for A4 size
-            const margin = 10; // mm
+            const pdf = new jsPDF('l', 'mm', 'a4');
+            const margin = 10;
             const pageWidth = pdf.internal.pageSize.getWidth();
             const pageHeight = pdf.internal.pageSize.getHeight();
             let yOffset = margin;
 
-            // Add title
             pdf.setFontSize(18);
             pdf.text("Rekapitulasi Data Pendukung", margin, yOffset);
             yOffset += 10;
 
-            // --- Render Table ---
             const tableWrapper = document.querySelector('#rekap .rekap-table-wrapper');
             if (!tableWrapper) {
                 alert("Tabel rekapitulasi tidak ditemukan.");
                 return;
             }
 
-            // Temporarily clone and modify the table for PDF rendering
             const originalTable = tableWrapper.querySelector('table');
             const tempDiv = document.createElement('div');
             tempDiv.style.position = 'absolute';
-            tempDiv.style.left = '-9999px'; // Move off-screen
-            tempDiv.style.width = (pageWidth - 2 * margin) + 'mm'; // Constrain width for rendering
+            tempDiv.style.left = '-9999px';
+            tempDiv.style.width = (pageWidth - 2 * margin) + 'mm';
             document.body.appendChild(tempDiv);
 
             const tableClone = originalTable.cloneNode(true);
-            // Remove checkbox column
             tableClone.querySelectorAll('th:first-child, td:first-child').forEach(el => el.remove());
-            // Remove action buttons column
             tableClone.querySelectorAll('th:last-child, td:last-child').forEach(el => el.remove());
             tempDiv.appendChild(tableClone);
 
             try {
-                const canvas = await html2canvas(tempDiv, { scale: 2 }); // Increased scale for better quality
+                const canvas = await html2canvas(tempDiv, { scale: 2 });
                 const imgData = canvas.toDataURL('image/png');
                 const imgWidth = pageWidth - 2 * margin;
                 const imgHeight = canvas.height * imgWidth / canvas.width;
                 let heightLeft = imgHeight;
-
                 let position = yOffset;
 
                 pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
@@ -1622,27 +1832,26 @@ window.$RefreshSig$ = () => (type) => type;</script>
 
                 while (heightLeft > 0) {
                     pdf.addPage();
-                    position = -heightLeft + margin; // Calculate position for the next part of the image
+                    position = -heightLeft + margin;
                     pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
                     heightLeft -= pageHeight;
                 }
-                yOffset = (imgHeight % pageHeight) + margin; // Reset yOffset for next content
-                if (yOffset < margin) yOffset = margin; // Ensure it's not too high
+                yOffset = (imgHeight % pageHeight) + margin;
+                if (yOffset < margin) yOffset = margin;
             } catch (error) {
                 console.error("Error rendering table to canvas:", error);
                 alert("Gagal merender tabel ke PDF. Silakan coba lagi.");
             } finally {
-                document.body.removeChild(tempDiv); // Clean up temporary div
+                document.body.removeChild(tempDiv);
             }
 
-            // --- Render Age Chart ---
             const ageChartCanvas = document.getElementById('ageChart');
             if (ageChartCanvas) {
-                if (yOffset + 100 > pageHeight) { // Estimate chart height
+                if (yOffset + 80 > pageHeight) {
                     pdf.addPage();
                     yOffset = margin;
                 } else {
-                    yOffset += 20; // Space after table
+                    yOffset += 15;
                 }
 
                 pdf.setFontSize(16);
@@ -1650,62 +1859,14 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 yOffset += 10;
 
                 const chartImgData = ageChartCanvas.toDataURL('image/png');
-                const chartImgWidth = 150; // Adjust as needed
+                const chartImgWidth = 150;
                 const chartImgHeight = ageChartCanvas.height * chartImgWidth / ageChartCanvas.width;
                 pdf.addImage(chartImgData, 'PNG', margin, yOffset, chartImgWidth, chartImgHeight);
                 yOffset += chartImgHeight + 10;
             }
-
-            // --- Render Category Details ---
-            const categoryDetailsDiv = document.getElementById('category-details');
-            if (categoryDetailsDiv && categoryDetailsDiv.innerHTML.trim() !== '<p>Tidak ada data untuk ditampilkan.</p>') {
-                if (yOffset + 50 > pageHeight) { // Estimate details height
-                    pdf.addPage();
-                    yOffset = margin;
-                } else {
-                    yOffset += 20; // Space after chart
-                }
-
-                pdf.setFontSize(16);
-                pdf.text("Detail Pendukung per Kategori Usia", margin, yOffset);
-                yOffset += 10;
-
-                const tempDetailsDiv = document.createElement('div');
-                tempDetailsDiv.style.position = 'absolute';
-                tempDetailsDiv.style.left = '-9999px';
-                tempDetailsDiv.style.width = (pageWidth - 2 * margin) + 'mm';
-                tempDetailsDiv.innerHTML = categoryDetailsDiv.innerHTML; // Copy content
-                document.body.appendChild(tempDetailsDiv);
-
-                try {
-                    const canvas = await html2canvas(tempDetailsDiv, { scale: 2 });
-                    const imgData = canvas.toDataURL('image/png');
-                    const imgWidth = pageWidth - 2 * margin;
-                    const imgHeight = canvas.height * imgWidth / canvas.width;
-                    let heightLeft = imgHeight;
-
-                    let position = yOffset;
-
-                    pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-                    heightLeft -= (pageHeight - position);
-
-                    while (heightLeft > 0) {
-                        pdf.addPage();
-                        position = -heightLeft + margin;
-                        pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
-                        heightLeft -= pageHeight;
-                    }
-                } catch (error) {
-                    console.error("Error rendering category details to canvas:", error);
-                    alert("Gagal merender detail kategori ke PDF. Silakan coba lagi.");
-                } finally {
-                    document.body.removeChild(tempDetailsDiv);
-                }
-            }
-
+            
             pdf.save("rekap_data_pendukung.pdf");
         };
-
 
         // --- NAVIGATION FUNCTIONS ---
 
@@ -1724,7 +1885,6 @@ window.$RefreshSig$ = () => (type) => type;</script>
             } else if (targetId === 'rekap') {
                 renderRecapTable();
             } else if (targetId === 'pengaturan') {
-                // Load current settings into the form fields
                 domElements.settingNamaAnggotaInput.value = appState.db.settings.namaAnggotaDPRD;
                 domElements.settingCardTitleInput.value = appState.db.settings.cardTitle;
                 domElements.settingFrontCardColor.value = appState.db.settings.frontCardColor;
@@ -1736,23 +1896,43 @@ window.$RefreshSig$ = () => (type) => type;</script>
         };
 
         // --- AUTHENTICATION FUNCTIONS ---
+        const startLoginBackgroundAnimation = () => {
+            if (loginBgInterval) clearInterval(loginBgInterval);
+
+            const loginContainer = domElements.loginPage;
+            if (!loginContainer) return;
+
+            const bgColors = ['#004d40', '#00695c', '#212529', '#00796b', '#004d40'];
+            let colorIndex = 0;
+
+            loginContainer.style.backgroundColor = bgColors[colorIndex];
+
+            loginBgInterval = setInterval(() => {
+                colorIndex = (colorIndex + 1) % bgColors.length;
+                loginContainer.style.backgroundColor = bgColors[colorIndex];
+            }, 5000);
+        };
+
         const performLogin = (username, password) => {
             const USER = 'admin';
             const PASS = 'admin123';
 
             if (username === USER && password === PASS) {
+                if (loginBgInterval) {
+                    clearInterval(loginBgInterval);
+                    loginBgInterval = null;
+                }
                 sessionStorage.setItem('loggedIn', 'true');
-                domElements.loginPage.classList.add('hidden'); // Sembunyikan halaman login
+                domElements.loginPage.classList.add('hidden');
                 domElements.appSidebar.classList.remove('hidden');
                 domElements.appMainContent.classList.remove('hidden');
-                initializeAppContent(); // Initialize app content after successful login
+                initializeAppContent();
             } else {
                 domElements.loginErrorMessage.classList.remove('hidden');
             }
         };
 
         const performLogout = () => {
-            // Tambahkan konfirmasi sebelum logout
             if (confirm("Apakah Anda yakin ingin keluar dari aplikasi?")) {
                 sessionStorage.removeItem('loggedIn');
                 domElements.loginPage.classList.remove('hidden');
@@ -1761,6 +1941,52 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 domElements.usernameInput.value = '';
                 domElements.passwordInput.value = '';
                 domElements.loginErrorMessage.classList.add('hidden');
+                startLoginBackgroundAnimation();
+            }
+        };
+
+        // --- DIGITAL CLOCK FUNCTIONS ---
+        const updateDigitalClock = () => {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            if (domElements.digitalClock) {
+                domElements.digitalClock.textContent = `${hours}:${minutes}:${seconds}`;
+            }
+        };
+
+        // --- DARK MODE FUNCTIONS ---
+        const toggleDarkMode = () => {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
+            updateDarkModeToggleIcon(isDarkMode);
+        };
+
+        const loadDarkModeSetting = () => {
+            const darkModeSetting = localStorage.getItem('darkMode');
+            if (darkModeSetting === 'enabled') {
+                document.body.classList.add('dark-mode');
+                updateDarkModeToggleIcon(true);
+            } else {
+                document.body.classList.remove('dark-mode');
+                updateDarkModeToggleIcon(false);
+            }
+        };
+
+        const updateDarkModeToggleIcon = (isDarkMode) => {
+            const sunIconPath = `<path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.183a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 001.06 1.06l1.591-1.59zM12 18.75a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V19.5a.75.75 0 01.75-.75zM4.929 6.183a.75.75 0 00-1.06 1.06l1.59 1.59a.75.75 0 101.06-1.06L4.929 6.183zm13.432 5.714a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H19.5a.75.75 0 01-.75-.75zM4.5 12a.75.75 0 01-.75-.75H2.25a.75.75 0 010-1.5H3.75a.75.75 0 01.75.75zM6.183 18.894a.75.75 0 001.06-1.06l-1.59-1.59a.75.75 0 00-1.06 1.06l1.59 1.59z" />`;
+            const moonIconPath = `<path d="M9.598 1.591a.75.75 0 01.785-.175 10.004 10.004 0 00-9.95 9.95c0 .2-.014.4-.045.592A.75.75 0 011.5 12a.75.75 0 00.75.75h2.25a.75.75 0 010 1.5H2.25A.75.75 0 001.5 15a.75.75 0 01-.175.785 10.004 10.004 0 009.95 9.95c.192-.031.392-.045.592-.045a.75.75 0 01.75.75v2.25a.75.75 0 001.5 0v-2.25a.75.75 0 01.75-.75h2.25a.75.75 0 000-1.5h-2.25a.75.75 0 01-.75-.75V15a.75.75 0 01.175-.785 10.004 10.004 0 009.95-9.95c-.031-.192-.045-.392-.045-.592a.75.75 0 01.75-.75v-2.25a.75.75 0 00-1.5 0v2.25a.75.75 0 01-.75.75h-2.25a.75.75 0 000 1.5h2.25a.75.75 0 01.75.75V9a.75.75 0 01-.175.785 10.004 10.004 0 00-9.95-9.95c-.192.031-.392.045-.592.045zM12 7.5a4.5 4.5 0 100 9 4.5 4.5 0 000-9z" />`;
+
+            // Update sidebar toggle
+            const sidebarToggleSvg = domElements.darkModeToggleSidebar.querySelector('svg');
+            const sidebarToggleSpan = domElements.darkModeToggleSidebar.querySelector('span');
+            if (sidebarToggleSvg) {
+                sidebarToggleSvg.innerHTML = isDarkMode ? moonIconPath : sunIconPath;
+            }
+            if (sidebarToggleSpan) {
+                sidebarToggleSpan.textContent = isDarkMode ? 'Mode Terang' : 'Mode Gelap';
             }
         };
 
@@ -1776,6 +2002,8 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 e.preventDefault();
                 performLogout();
             });
+
+            domElements.darkModeToggleSidebar.addEventListener('click', toggleDarkMode); // Sidebar dark mode toggle event listener
 
             domElements.navLinks.forEach(link => link.addEventListener('click', handleNavigation));
             domElements.pendukungForm.addEventListener('submit', handlePendukungFormSubmit);
@@ -1800,6 +2028,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                         domElements.jenisKelaminSelect.value = pendukungToEdit.jenis_kelamin || '';
                         domElements.tempatLahirInput.value = pendukungToEdit.tempat_lahir || '';
                         domElements.tanggalLahirInput.value = pendukungToEdit.tanggal_lahir || '';
+                        domElements.kecamatanSelect.value = pendukungToEdit.kecamatan || '';
                         domElements.alamatInput.value = pendukungToEdit.alamat || '';
                         
                         domElements.editIdInput.value = pendukungToEdit.id;
@@ -1850,10 +2079,10 @@ window.$RefreshSig$ = () => (type) => type;</script>
             domElements.saveSettingsBtn.addEventListener('click', async () => {
                 appState.db.settings.namaAnggotaDPRD = domElements.settingNamaAnggotaInput.value.trim();
                 appState.db.settings.cardTitle = domElements.settingCardTitleInput.value.trim();
-                appState.db.settings.frontCardColor = domElements.settingFrontCardColor.value; // Save new color
-                appState.db.settings.backCardColor = domElements.settingBackCardColor.value;   // Save new color
-                appState.db.settings.frontCardTextColor = domElements.settingFrontCardTextColor.value; // Save new color
-                appState.db.settings.backCardTextColor = domElements.settingBackCardTextColor.value;   // Save new color
+                appState.db.settings.frontCardColor = domElements.settingFrontCardColor.value;
+                appState.db.settings.backCardColor = domElements.settingBackCardColor.value;
+                appState.db.settings.frontCardTextColor = domElements.settingFrontCardTextColor.value;
+                appState.db.settings.backCardTextColor = domElements.settingBackCardTextColor.value;
 
                 let dprdPhotoUrl = null;
                 const dprdFile = domElements.settingDprdPhotoUpload.files[0];
@@ -1865,7 +2094,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                         console.error('Compression error:', err);
                     }
                 } else {
-                    dprdPhotoUrl = appState.db.settings.dprdPhotoUrl; // Keep existing if no new upload
+                    dprdPhotoUrl = appState.db.settings.dprdPhotoUrl; 
                 }
                 appState.db.settings.dprdPhotoUrl = dprdPhotoUrl;
 
@@ -1879,55 +2108,34 @@ window.$RefreshSig$ = () => (type) => type;</script>
                         console.error('Compression error:', err);
                     }
                 } else {
-                    pkbLogoUrl = appState.db.settings.pkbLogoUrl; // Keep existing if no new upload
+                    pkbLogoUrl = appState.db.settings.pkbLogoUrl; 
                 }
                 appState.db.settings.pkbLogoUrl = pkbLogoUrl;
 
                 saveAppStateToLocalStorage();
-                applyCardColorsToCSS(); // Apply colors to live CSS variables
+                applyCardColorsToCSS();
 
                 const currentPreviewDataString = domElements.pendukungForm.dataset.currentPreviewData;
                 if (currentPreviewDataString) {
                     const dataForPreview = JSON.parse(currentPreviewDataString);
-                    updateCardPreview(dataForPreview); // Re-render with new settings
+                    updateCardPreview(dataForPreview);
                 }
                 alert('Pengaturan kartu berhasil disimpan!');
             });
 
-            // Add event listeners for color inputs to update preview dynamically
-            domElements.settingFrontCardColor.addEventListener('input', () => {
-                appState.db.settings.frontCardColor = domElements.settingFrontCardColor.value;
-                applyCardColorsToCSS();
-                const currentPreviewDataString = domElements.pendukungForm.dataset.currentPreviewData;
-                if (currentPreviewDataString) {
-                    updateCardPreview(JSON.parse(currentPreviewDataString));
-                }
+            [domElements.settingFrontCardColor, domElements.settingBackCardColor, domElements.settingFrontCardTextColor, domElements.settingBackCardTextColor].forEach(input => {
+                input.addEventListener('input', () => {
+                    appState.db.settings.frontCardColor = domElements.settingFrontCardColor.value;
+                    appState.db.settings.backCardColor = domElements.settingBackCardColor.value;
+                    appState.db.settings.frontCardTextColor = domElements.settingFrontCardTextColor.value;
+                    appState.db.settings.backCardTextColor = domElements.settingBackCardTextColor.value;
+                    applyCardColorsToCSS();
+                    const currentPreviewDataString = domElements.pendukungForm.dataset.currentPreviewData;
+                    if (currentPreviewDataString) {
+                        updateCardPreview(JSON.parse(currentPreviewDataString));
+                    }
+                });
             });
-            domElements.settingBackCardColor.addEventListener('input', () => {
-                appState.db.settings.backCardColor = domElements.settingBackCardColor.value;
-                applyCardColorsToCSS();
-                const currentPreviewDataString = domElements.pendukungForm.dataset.currentPreviewData;
-                if (currentPreviewDataString) {
-                    updateCardPreview(JSON.parse(currentPreviewDataString));
-                }
-            });
-            domElements.settingFrontCardTextColor.addEventListener('input', () => {
-                appState.db.settings.frontCardTextColor = domElements.settingFrontCardTextColor.value;
-                applyCardColorsToCSS();
-                const currentPreviewDataString = domElements.pendukungForm.dataset.currentPreviewData;
-                if (currentPreviewDataString) {
-                    updateCardPreview(JSON.parse(currentPreviewDataString));
-                }
-            });
-            domElements.settingBackCardTextColor.addEventListener('input', () => {
-                appState.db.settings.backCardTextColor = domElements.settingBackCardTextColor.value;
-                applyCardColorsToCSS();
-                const currentPreviewDataString = domElements.pendukungForm.dataset.currentPreviewData;
-                if (currentPreviewDataString) {
-                    updateCardPreview(JSON.parse(currentPreviewDataString));
-                }
-            });
-
 
             domElements.selectAllCheckbox.addEventListener('change', (e) => {
                 const isChecked = e.target.checked;
@@ -1938,18 +2146,28 @@ window.$RefreshSig$ = () => (type) => type;</script>
 
             domElements.exportCSVBtn.addEventListener('click', exportPendukungToCSV);
 
-            ['nama', 'nik', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'alamat'].forEach(id => {
+            ['nama', 'nik', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 'kecamatan', 'alamat'].forEach(id => {
                 document.getElementById(id).addEventListener('input', () => {
+                    const selectedKecamatan = domElements.kecamatanSelect.value;
+                    const nextIdForPreview = appState.db.settings.nextIdCounters[selectedKecamatan] || 1;
+
+                    const noPendukungPreview = domElements.editIdInput.value 
+                        ? appState.db.pendukung.find(p => p.id === parseInt(domElements.editIdInput.value, 10))?.no_pendukung 
+                        : `PKB-LOYAL-${String(nextIdForPreview).padStart(4, '0')}`;
+
                     const formDataForPreview = {
                         nama: domElements.namaInput.value,
                         nik: domElements.nikInput.value,
                         jenis_kelamin: domElements.jenisKelaminSelect.value,
                         tempat_lahir: domElements.tempatLahirInput.value,
                         tanggal_lahir: domElements.tanggalLahirInput.value,
+                        kecamatan: domElements.kecamatanSelect.value,
                         alamat: domElements.alamatInput.value,
                         usia: calculateAge(domElements.tanggalLahirInput.value),
-                        fotoUrl: domElements.fotoPendukungUpload.files[0] ? URL.createObjectURL(domElements.fotoPendukungUpload.files[0]) : (appState.db.pendukung.find(p => p.id === parseInt(domElements.editIdInput.value, 10))?.fotoUrl || null),
-                        no_pendukung: domElements.editIdInput.value ? appState.db.pendukung.find(p => p.id === parseInt(domElements.editIdInput.value, 10))?.no_pendukung : `PKB-LOYAL-${String(appState.db.settings.nextIdCounter).padStart(4, '0')}`
+                        fotoUrl: domElements.fotoPendukungUpload.files[0] 
+                            ? URL.createObjectURL(domElements.fotoPendukungUpload.files[0]) 
+                            : (appState.db.pendukung.find(p => p.id === parseInt(domElements.editIdInput.value, 10))?.fotoUrl || null),
+                        no_pendukung: noPendukungPreview
                     };
                     updateCardPreview(formDataForPreview);
                     domElements.pendukungForm.dataset.currentPreviewData = JSON.stringify(formDataForPreview);
@@ -1960,11 +2178,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 const fotoFile = e.target.files[0];
                 let previewFotoUrl = null;
                 if (fotoFile) {
-                    try {
-                        previewFotoUrl = await compressImage(fotoFile);
-                    } catch (err) {
-                        console.error('Compression error for preview:', err);
-                    }
+                    previewFotoUrl = URL.createObjectURL(fotoFile);
                 }
 
                 const currentPreviewDataString = domElements.pendukungForm.dataset.currentPreviewData;
@@ -1972,39 +2186,31 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 if (currentPreviewDataString) {
                     currentPreviewData = JSON.parse(currentPreviewDataString);
                 } else {
+                    const selectedKecamatan = domElements.kecamatanSelect.value;
+                    const nextIdForPreview = appState.db.settings.nextIdCounters[selectedKecamatan] || 1;
+
                     currentPreviewData = {
                         nama: domElements.namaInput.value,
                         nik: domElements.nikInput.value,
                         jenis_kelamin: domElements.jenisKelaminSelect.value,
                         tempat_lahir: domElements.tempatLahirInput.value,
                         tanggal_lahir: domElements.tanggalLahirInput.value,
+                        kecamatan: domElements.kecamatanSelect.value,
                         alamat: domElements.alamatInput.value,
                         usia: calculateAge(domElements.tanggalLahirInput.value),
-                        no_pendukung: domElements.editIdInput.value ? appState.db.pendukung.find(p => p.id === parseInt(domElements.editIdInput.value, 10))?.no_pendukung : `PKB-LOYAL-${String(appState.db.settings.nextIdCounter).padStart(4, '0')}`
+                        no_pendukung: `PKB-LOYAL-${String(nextIdForPreview).padStart(4, '0')}`
                     };
                 }
                 currentPreviewData.fotoUrl = previewFotoUrl;
                 updateCardPreview(currentPreviewData);
                 domElements.pendukungForm.dataset.currentPreviewData = JSON.stringify(currentPreviewData);
             });
-
-            if (domElements.resetNextIdBtn) {
-                domElements.resetNextIdBtn.addEventListener('click', () => {
-                    if (confirm("PERINGATAN: Anda akan mereset nomor ID pendukung berikutnya ke 'PKB-LOYAL-0001'. Ini mungkin menyebabkan duplikasi ID jika ada pendukung yang ID-nya sudah terpakai sebelumnya. Lanjutkan?")) {
-                        appState.db.settings.nextIdCounter = 1;
-                        saveAppStateToLocalStorage();
-                        updateNextIdDisplay();
-                        alert("Nomor ID pendukung berikutnya telah direset ke PKB-LOYAL-0001.");
-                    }
-                });
-            }
         };
 
         // --- INITIALIZATION ---
 
         const initializeAppContent = () => {
             loadAppStateFromLocalStorage();
-            // Set initial values for color inputs from loaded settings
             domElements.settingNamaAnggotaInput.value = appState.db.settings.namaAnggotaDPRD;
             domElements.settingCardTitleInput.value = appState.db.settings.cardTitle;
             domElements.settingFrontCardColor.value = appState.db.settings.frontCardColor;
@@ -2012,17 +2218,19 @@ window.$RefreshSig$ = () => (type) => type;</script>
             domElements.settingFrontCardTextColor.value = appState.db.settings.frontCardTextColor;
             domElements.settingBackCardTextColor.value = appState.db.settings.backCardTextColor;
             
-            applyCardColorsToCSS(); // Apply colors to CSS variables on app start
+            applyCardColorsToCSS();
             updateNextIdDisplay();
             renderRecapTable();
             resetPendukungForm();
             
             document.querySelector('.nav-link.active')?.click();
+            setInterval(updateDigitalClock, 1000); // Start clock
         };
 
         const checkLoginStatus = () => {
+            loadDarkModeSetting(); // Load dark mode setting before showing anything
             if (sessionStorage.getItem('loggedIn') === 'true') {
-                domElements.loginPage.classList.add('hidden'); // Sembunyikan halaman login
+                domElements.loginPage.classList.add('hidden');
                 domElements.appSidebar.classList.remove('hidden');
                 domElements.appMainContent.classList.remove('hidden');
                 initializeAppContent();
@@ -2030,6 +2238,7 @@ window.$RefreshSig$ = () => (type) => type;</script>
                 domElements.loginPage.classList.remove('hidden');
                 domElements.appSidebar.classList.add('hidden');
                 domElements.appMainContent.classList.add('hidden');
+                startLoginBackgroundAnimation();
             }
         };
 
